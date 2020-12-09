@@ -47,9 +47,15 @@ public class Business implements Purchasable {
 
 	public void update(boolean purchased) {
 		// If an instance of this business has been purchased, execute the below statement.
-		if (purchased) costMultiplier *= 1.9;	
+		if (purchased) 
+			costMultiplier *= 1.9;
+		
+		if (quantityPurchased > 0) 
+			currentRevenue = initialRevenue * quantityPurchased * multiplier;
+		else 
+			initialRevenue *= multiplier;
+		
 		currentCost = initialCost * costMultiplier;
-		currentRevenue = initialRevenue * quantityPurchased * multiplier;
 	}
 	
 	public boolean isPurchased() {
@@ -111,7 +117,13 @@ public class Business implements Purchasable {
 	public String getCostAsString() {
 		return currency.format(currentCost);
 	}
+	
+	public boolean equals(Business b) {
+		return this.name == b.name && this.initialRevenue == b.initialRevenue
+				&& this.initialCost == b.initialCost;
+	}
 
+	@Override
 	public String toString() {
 		return quantityPurchased + " " + name + " (" + currency.format(currentRevenue) + ")";
 	}

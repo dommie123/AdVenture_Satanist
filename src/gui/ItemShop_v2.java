@@ -75,9 +75,9 @@ public class ItemShop_v2 extends JFrame {
 		btnBuyManager.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					Manager current = game.getManagerByIndex(listManagers.getSelectedIndex());
 					game.update(7, listManagers.getSelectedIndex());
-					
-					if (game.getManagerByIndex(listManagers.getSelectedIndex()).isPurchased()) {
+					if (!game.getManagers().contains(current)) {
 						modelManagers.remove(listManagers.getSelectedIndex());
 						listManagers.setModel(modelManagers);
 					}
@@ -96,9 +96,9 @@ public class ItemShop_v2 extends JFrame {
 		btnBuyMultiplier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					Multiplier current = game.getMultiplierByIndex(listMultipliers.getSelectedIndex());
 					game.update(4, listMultipliers.getSelectedIndex());
-					
-					if (game.getMultiplierByIndex(listMultipliers.getSelectedIndex()).isPurchased()) {
+					if (!game.getMultipliers().contains(current)) {
 						modelMultipliers.remove(listMultipliers.getSelectedIndex());
 						listMultipliers.setModel(modelMultipliers);
 					}
@@ -117,13 +117,13 @@ public class ItemShop_v2 extends JFrame {
 		btnBuyBoost.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					SpeedBoost current = game.getBoostByIndex(listBoosts.getSelectedIndex());
 					game.update(5, listBoosts.getSelectedIndex());
-					
-					if (game.getBoostByIndex(listBoosts.getSelectedIndex()).isPurchased()) {
+					if (!game.getBoosts().contains(current)) {
 						modelBoosts.remove(listBoosts.getSelectedIndex());
 						listBoosts.setModel(modelBoosts);
 					}
-					
+
 					contentPane.revalidate();
 					contentPane.repaint();
 				} catch (ArrayIndexOutOfBoundsException ex) {

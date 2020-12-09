@@ -7,6 +7,7 @@ public class Multiplier implements Purchasable {
 	private double cost;
 	private double value;
 	private String name;
+	private Business targetBusiness;
 	private boolean purchased;
 	private final DecimalFormat currency = (DecimalFormat) NumberFormat.getCurrencyInstance();
 
@@ -35,6 +36,14 @@ public class Multiplier implements Purchasable {
 
 	public void setPurchased() {
 		purchased = !purchased;
+	}
+	
+	public Business getTargetBusiness() {
+		return targetBusiness;
+	}
+	
+	public void setTargetBusiness(Business business) {
+		targetBusiness = business;
 	}
 
 	@Override

@@ -15,6 +15,7 @@ public class Player {
 	private String name;
 	private double currentMoney;
 	private double moneyEarned;			// The total amount of money the player has gained throughout the game
+	
 
 	public int progress = 0;
 
@@ -22,7 +23,6 @@ public class Player {
 		this.name = name;
 		currentMoney = 0.00;
 	}
-
 
 	public void gainRevenue(Business business) {
 		currentMoney += business.getRevenue();

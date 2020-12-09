@@ -10,6 +10,7 @@ public class Manager implements Purchasable {
 	private boolean isPurchased;
 	private double cost;
 	private String name;
+	private Business targetBusiness;
 	
 	private final DecimalFormat currency = (DecimalFormat) NumberFormat.getCurrencyInstance();
 	
@@ -21,6 +22,15 @@ public class Manager implements Purchasable {
 	
 	public void update(Business business) {
 		business.setManaged();
+	}
+	
+	public Business getTargetBusiness() {
+		// TODO Auto-generated method stub
+		return targetBusiness;
+	}
+	
+	public void setTargetBusiness(Business business) {
+		targetBusiness = business;
 	}
 
 	@Override
@@ -42,4 +52,6 @@ public class Manager implements Purchasable {
 	public String toString() {
 		return name + " (" + currency.format(cost) + ")";
 	}
+
+
 }
