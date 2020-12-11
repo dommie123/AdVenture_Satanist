@@ -87,90 +87,6 @@ public class Ad_GUI extends JPanel {
 		JProgressBar progressBloodBaths = new JProgressBar(0, 100);
 		add(progressBloodBaths, "cell 1 8,growx");
 		
-		JButton btnPortals = new JButton(game.getBusinessByIndex(1).toString());
-		btnPortals.setEnabled(false);
-		btnPortals.addActionListener(l -> {
-			btnPortals.setEnabled(false);
-			portalsDone = false;
-			progressPortals.setValue(0);
-			worker1 = workers.remove(1);
-			worker1.execute();
-			
-			worker1.update(10.0 / game.getBusinessByIndex(1).getWaitTime());
-			worker1.addPropertyChangeListener(pcEvent -> {
-				if (pcEvent.getPropertyName().equals("progress")) {
-					int value = (int) pcEvent.getNewValue();
-					progressPortals.setValue(value);
-				} else if (pcEvent.getNewValue() == SwingWorker.StateValue.DONE) {
-					game.update(2, 1);
-					portalsDone = true;
-					lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
-					btnPortals.setEnabled(true);
-					progressPortals.setValue(progressPortals.getMinimum());
-					workers.add(1, new Worker());
-					if (game.getBusinessByIndex(1).isAutoManaged()) {
-						btnPortals.doClick();
-					}
-				}
-			});
-		});
-		add(btnPortals, "cell 0 5,growx");
-		
-
-		
-		JButton btnBuyPortals = new JButton("Buy 1 (" + game.getBusinessByIndex(1).getCostAsString() + ")");
-		btnBuyPortals.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				game.update(1, 1);
-				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
-				btnPortals.setText(game.getBusinessByIndex(1).toString());
-				btnBuyPortals.setText("Buy 1 (" + game.getBusinessByIndex(1).getCostAsString() + ")");
-				if (!btnPortals.isEnabled() && game.getBusinessByIndex(1).isPurchased()) btnPortals.setEnabled(true);
-			}
-		});
-		add(btnBuyPortals, "cell 2 5,growx");		
-		
-		JButton btnCandiedSouls = new JButton(game.getBusinessByIndex(2).toString());
-		btnCandiedSouls.setEnabled(false);
-		btnCandiedSouls.addActionListener(l -> {
-			btnCandiedSouls.setEnabled(false);
-			soulsDone = false;
-			progressSouls.setValue(0);
-			worker2 = workers.remove(2);
-			worker2.execute();
-			
-			worker2.update(10.0 / game.getBusinessByIndex(2).getWaitTime());
-			worker2.addPropertyChangeListener(pcEvent -> {
-				if (pcEvent.getPropertyName().equals("progress")) {
-					int value = (int) pcEvent.getNewValue();
-					progressSouls.setValue(value);
-				} else if (pcEvent.getNewValue() == SwingWorker.StateValue.DONE) {
-					game.update(2, 2);
-					soulsDone = true;
-					lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
-					btnCandiedSouls.setEnabled(true);
-					progressSouls.setValue(progressSouls.getMinimum());
-					workers.add(2, new Worker());
-					if (game.getBusinessByIndex(2).isAutoManaged()) {
-						btnCandiedSouls.doClick();
-					}
-				}
-			});
-		});
-		add(btnCandiedSouls, "cell 0 6,growx");
-		
-		JButton btnBuySouls = new JButton("Buy 1 (" + game.getBusinessByIndex(2).getCostAsString() + ")");
-		btnBuySouls.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				game.update(1, 2);
-				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
-				btnCandiedSouls.setText(game.getBusinessByIndex(2).toString());
-				btnBuySouls.setText("Buy 1 (" + game.getBusinessByIndex(2).getCostAsString() + ")");
-				if (!btnCandiedSouls.isEnabled() && game.getBusinessByIndex(2).isPurchased()) btnCandiedSouls.setEnabled(true);
-			}
-		});
-		add(btnBuySouls, "cell 2 6,growx");
-		
 		// Triggers a background thread for updating the progress bar
 		JButton btnPentagrams = new JButton(game.getBusinessByIndex(0).toString());
 		btnPentagrams.addActionListener(l -> {
@@ -194,7 +110,7 @@ public class Ad_GUI extends JPanel {
 					lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
 					btnPentagrams.setEnabled(true);
 					progressPentagrams.setValue(progressPentagrams.getMinimum());	
-					workers.add(0, new Worker());
+					workers.add(new Worker());
 					if (game.getBusinessByIndex(0).isAutoManaged()) {
 						btnPentagrams.doClick();
 					}
@@ -214,13 +130,95 @@ public class Ad_GUI extends JPanel {
 		});
 		add(btnBuyPentagrams, "cell 2 4,growx");
 		
+		JButton btnPortals = new JButton(game.getBusinessByIndex(1).toString());
+		btnPortals.setEnabled(false);
+		btnPortals.addActionListener(l -> {
+			btnPortals.setEnabled(false);
+			portalsDone = false;
+			progressPortals.setValue(0);
+			worker1 = workers.remove(0);
+			worker1.execute();
+			
+			worker1.update(10.0 / game.getBusinessByIndex(1).getWaitTime());
+			worker1.addPropertyChangeListener(pcEvent -> {
+				if (pcEvent.getPropertyName().equals("progress")) {
+					int value = (int) pcEvent.getNewValue();
+					progressPortals.setValue(value);
+				} else if (pcEvent.getNewValue() == SwingWorker.StateValue.DONE) {
+					game.update(2, 1);
+					portalsDone = true;
+					lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
+					btnPortals.setEnabled(true);
+					progressPortals.setValue(progressPortals.getMinimum());
+					workers.add(new Worker());
+					if (game.getBusinessByIndex(1).isAutoManaged()) {
+						btnPortals.doClick();
+					}
+				}
+			});
+		});
+		add(btnPortals, "cell 0 5,growx");
+		
+		JButton btnBuyPortals = new JButton("Buy 1 (" + game.getBusinessByIndex(1).getCostAsString() + ")");
+		btnBuyPortals.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				game.update(1, 1);
+				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
+				btnPortals.setText(game.getBusinessByIndex(1).toString());
+				btnBuyPortals.setText("Buy 1 (" + game.getBusinessByIndex(1).getCostAsString() + ")");
+				if (!btnPortals.isEnabled() && game.getBusinessByIndex(1).isPurchased()) btnPortals.setEnabled(true);
+			}
+		});
+		add(btnBuyPortals, "cell 2 5,growx");		
+		
+		JButton btnCandiedSouls = new JButton(game.getBusinessByIndex(2).toString());
+		btnCandiedSouls.setEnabled(false);
+		btnCandiedSouls.addActionListener(l -> {
+			btnCandiedSouls.setEnabled(false);
+			soulsDone = false;
+			progressSouls.setValue(0);
+			worker2 = workers.remove(0);
+			worker2.execute();
+			
+			worker2.update(10.0 / game.getBusinessByIndex(2).getWaitTime());
+			worker2.addPropertyChangeListener(pcEvent -> {
+				if (pcEvent.getPropertyName().equals("progress")) {
+					int value = (int) pcEvent.getNewValue();
+					progressSouls.setValue(value);
+				} else if (pcEvent.getNewValue() == SwingWorker.StateValue.DONE) {
+					game.update(2, 2);
+					soulsDone = true;
+					lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
+					btnCandiedSouls.setEnabled(true);
+					progressSouls.setValue(progressSouls.getMinimum());
+					workers.add(new Worker());
+					if (game.getBusinessByIndex(2).isAutoManaged()) {
+						btnCandiedSouls.doClick();
+					}
+				}
+			});
+		});
+		add(btnCandiedSouls, "cell 0 6,growx");
+		
+		JButton btnBuySouls = new JButton("Buy 1 (" + game.getBusinessByIndex(2).getCostAsString() + ")");
+		btnBuySouls.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				game.update(1, 2);
+				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
+				btnCandiedSouls.setText(game.getBusinessByIndex(2).toString());
+				btnBuySouls.setText("Buy 1 (" + game.getBusinessByIndex(2).getCostAsString() + ")");
+				if (!btnCandiedSouls.isEnabled() && game.getBusinessByIndex(2).isPurchased()) btnCandiedSouls.setEnabled(true);
+			}
+		});
+		add(btnBuySouls, "cell 2 6,growx");
+		
 		JButton btnMetalBands = new JButton(game.getBusinessByIndex(3).toString());
 		btnMetalBands.setEnabled(false);
 		btnMetalBands.addActionListener(l -> {
 			btnMetalBands.setEnabled(false);
 			metalBandsDone = false;
 			progressMetalBands.setValue(0);
-			worker3 = workers.remove(3);
+			worker3 = workers.remove(0);
 			worker3.execute();
 
 			worker3.update(10.0 / game.getBusinessByIndex(3).getWaitTime());
@@ -234,7 +232,7 @@ public class Ad_GUI extends JPanel {
 					lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
 					btnMetalBands.setEnabled(true);
 					progressMetalBands.setValue(progressMetalBands.getMinimum());
-					workers.add(3, new Worker());
+					workers.add(new Worker());
 					if (game.getBusinessByIndex(3).isAutoManaged()) {
 						btnMetalBands.doClick();
 					}
@@ -260,7 +258,7 @@ public class Ad_GUI extends JPanel {
 			btnBloodBaths.setEnabled(false);
 			bloodBathsDone = false;
 			progressBloodBaths.setValue(0);
-			worker4 = workers.remove(4);
+			worker4 = workers.remove(0);
 			worker4.execute();
 			
 			worker4.update(10.0 / game.getBusinessByIndex(4).getWaitTime());
@@ -274,7 +272,7 @@ public class Ad_GUI extends JPanel {
 					lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
 					btnBloodBaths.setEnabled(true);
 					progressBloodBaths.setValue(progressBloodBaths.getMinimum());
-					workers.add(4, new Worker());
+					workers.add(new Worker());
 					if (game.getBusinessByIndex(4).isAutoManaged()) {
 						btnBloodBaths.doClick();
 					}

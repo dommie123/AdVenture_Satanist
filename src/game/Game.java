@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import assets.*;
 
 public class Game {
@@ -105,11 +103,11 @@ public class Game {
 		case 4:
 			int i = index;
 			while (!multipliers.get(index).getTargetBusiness().equals(businesses.get(i))) {
-				if (i + 1 == multipliers.size()) i = 0;
+				if (i + 1 >= businesses.size()) i = 0;
 				else i++;
 			}
 			player.buyMultiplier(businesses.get(i), multipliers.get(index));
-			if (multipliers.get(i).isPurchased()) purchasedMultipliers.add(multipliers.remove(index));
+			if (multipliers.get(index).isPurchased()) purchasedMultipliers.add(multipliers.remove(index));
 			break;
 		case 5:
 			player.buySpeedBoost(businesses, boosts.remove(index));
@@ -120,16 +118,10 @@ public class Game {
 		case 7: 
 			int j = index;
 			while (!managers.get(index).getTargetBusiness().equals(businesses.get(j))) {
-				if (j + 1 == managers.size()) j = 0;
+				if (j + 1 >= businesses.size()) j = 0;
 				else j++;
 			}
-			if (businesses.get(index).isPurchased()) {
-				player.buyManager(businesses.get(j), managers.remove(index));
-			}
-			else 
-				JOptionPane.showMessageDialog(null, "Please buy the business associated with that manager! "
-						+ "They can't manage nothing after all!", "Buy " + businesses.get(index) + " first!"
-						, JOptionPane.INFORMATION_MESSAGE);
+			player.buyManager(businesses.get(j), managers.remove(index));
 			break;
 		}
 	}
