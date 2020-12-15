@@ -1,17 +1,24 @@
 package game;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import assets.*;
 
-public class Player {
+public class Player implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1879347579100412176L;
 	private String name;
 	private double currentMoney;
 	private double moneyEarned;			// The total amount of money the player has gained throughout the game
@@ -109,6 +116,10 @@ public class Player {
 
 	public String getName() {
 		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public double getCurrentMoney() {

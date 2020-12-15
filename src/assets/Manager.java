@@ -1,12 +1,17 @@
 package assets;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import assets.Business;
 
-public class Manager implements Purchasable {
+public class Manager implements Purchasable, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8693883560268109282L;
 	private boolean isPurchased;
 	private double cost;
 	private String name;

@@ -6,84 +6,123 @@ import gui.ItemShop;
 import gui.ItemShop_v2;
 
 import java.awt.Toolkit;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import assets.*;
 
-public class Game {
+public class Game implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3891348446378790339L;
 	private Player player;
-	private Ad_GUI gui;
-	private ItemShop shop;
-	private ItemShop_v2 newShop;
 	private List<Business> businesses;
 	private List<Multiplier> multipliers;
 	private List<Multiplier> purchasedMultipliers;
 	private List<SpeedBoost> boosts;
 	private List<Manager> managers;
 	private Demons demons;
-	private final static Scanner s = new Scanner(System.in);
+	private transient static Ad_GUI gui;
+	private transient static ItemShop shop;
+	private transient static ItemShop_v2 newShop;
+	private transient static boolean isPreviousSave = false;
+	private transient static final Scanner s = new Scanner(System.in);
 
-	public Game() {
-		businesses = new ArrayList<Business>(Arrays.asList(new Business(0.75, 0.50, 1, true, "Pentagrams")
-				, new Business(4.00, 2, 2, false, "Hell Portals")
-				, new Business(25.00, 10, 5, false, "Candied Souls")
-				, new Business(100.00, 50, 30, false, "Metal Bands")
-				, new Business(950.00, 400, 120, false, "BloodBaths")));
-		multipliers = new ArrayList<Multiplier>(Arrays.asList(new Multiplier(20, 3.5, "Extra Candles")
-				, new Multiplier(50.00, 4, "Flint and Steel")
-				, new Multiplier(200, 4, "Corruption")
-				, new Multiplier(1000, 7.77, "Golden Fiddles")
-				, new Multiplier(5000, 4.1, "Bigger Chainsaws")));
-		boosts = new ArrayList<SpeedBoost>(Arrays.asList(new SpeedBoost(2, 1, 20, "1 hr. Boost")
-				, new SpeedBoost(2, 4, 100, "4 hr. Boost")
-				, new SpeedBoost(2, 12, 400, "12 hr. Boost")
-				, new SpeedBoost(2, 24, 2000, "24 hr. Boost")
-				, new SpeedBoost(2, 72, 15000, "3 day Boost")));
-		managers = new ArrayList<Manager>(Arrays.asList(new Manager(20, "Face McStabby")
-				, new Manager(60, "Minecart Paul")
-				, new Manager(500, "Red W&W")
-				, new Manager(2500, "Mars Tookmalut")
-				, new Manager(10500, "Count Vlad")));
-		demons = new Demons(0.15);
-		purchasedMultipliers = new ArrayList<Multiplier>();
+	public Game() {		
+		if (!isPreviousSave) {
+
+			businesses = new ArrayList<Business>(Arrays.asList(new Business(4.00, 0.50, 1, true, "Pentagrams", new ArrayList<HiddenMultiplier>(Arrays.asList(
+							new HiddenMultiplier(2, 10), new HiddenMultiplier(1.5, 20), new HiddenMultiplier(3, 40)
+							, new HiddenMultiplier(4, 50), new HiddenMultiplier(1.2, 80), new HiddenMultiplier(10, 100)))),
+					new Business(25.00, 2, 2, false, "Hell Portals", new ArrayList<HiddenMultiplier>(Arrays.asList(
+							new HiddenMultiplier(1.5, 10), new HiddenMultiplier(2, 30), new HiddenMultiplier(2.9, 40)
+							, new HiddenMultiplier(4, 60), new HiddenMultiplier(6.66, 90)))),
+					new Business(150.00, 10, 5, false, "Candied Souls", new ArrayList<HiddenMultiplier>(Arrays.asList(
+							new HiddenMultiplier(2.1, 10), new HiddenMultiplier(1.2, 20), new HiddenMultiplier(1.5, 30)
+							, new HiddenMultiplier(1.7, 40), new HiddenMultiplier(2.2, 50), new HiddenMultiplier(1.9, 70)
+							, new HiddenMultiplier(3, 80), new HiddenMultiplier(2.7, 90), new HiddenMultiplier(5, 100)))),
+					new Business(1020, 50, 30, false, "Metal Bands", new ArrayList<HiddenMultiplier>(Arrays.asList(
+							new HiddenMultiplier(10, 40), new HiddenMultiplier(5.6, 60), new HiddenMultiplier(6.66, 90)))),
+					new Business(9990, 400, 120, false, "BloodBaths", new ArrayList<HiddenMultiplier>(Arrays.asList(
+							new HiddenMultiplier(1.5, 10), new HiddenMultiplier(3, 30), new HiddenMultiplier(4, 40)
+							, new HiddenMultiplier(6.66, 60), new HiddenMultiplier(7, 70), new HiddenMultiplier(9.99, 90))))));
+			multipliers = new ArrayList<Multiplier>(Arrays.asList(new Multiplier(20, 3.5, "Extra Candles"),
+					new Multiplier(100, 4, "Flint and Steel"), new Multiplier(550, 4, "Corruption"),
+					new Multiplier(6660, 7.77, "Golden Fiddles"), new Multiplier(20000, 4.1, "Bigger Chainsaws")));
+			boosts = new ArrayList<SpeedBoost>(Arrays.asList(new SpeedBoost(2, 1, 500, "1 hr. Boost"),
+					new SpeedBoost(2, 4, 1500, "4 hr. Boost"), new SpeedBoost(2, 12, 8000, "12 hr. Boost"),
+					new SpeedBoost(2, 24, 25000, "24 hr. Boost"), new SpeedBoost(2, 72, 75000, "3 day Boost")));
+			managers = new ArrayList<Manager>(Arrays.asList(new Manager(150, "Face McStabby"),
+					new Manager(1200, "Minecart Paul"), new Manager(9500, "Red W&W"),
+					new Manager(60000, "Mars Tookmalut"), new Manager(240000, "Count Vlad")));
+			demons = new Demons(0.15);
+			purchasedMultipliers = new ArrayList<Multiplier>();
+
+			for (int i = 0; i < businesses.size() && i < multipliers.size(); i++)
+				multipliers.get(i).setTargetBusiness(businesses.get(i));
+			for (int i = 0; i < businesses.size() && i < managers.size(); i++)
+				managers.get(i).setTargetBusiness(businesses.get(i));
+
+			player = new Player(JOptionPane.showInputDialog(null, "Please choose a username: ", "New User", JOptionPane.INFORMATION_MESSAGE));
+		}
 		
-		for (int i = 0; i < businesses.size() && i < multipliers.size(); i++)
-			multipliers.get(i).setTargetBusiness(businesses.get(i));
-		for (int i = 0; i < businesses.size() && i < managers.size(); i++)
-			managers.get(i).setTargetBusiness(businesses.get(i));
-		
-		player = new Player("Player One");
 		gui = new Ad_GUI(this);
 		shop = new ItemShop(this);
 		newShop = new ItemShop_v2(this);
 		shop.setVisible(false);
 		newShop.setVisible(false);
-		
+
 		JFrame frame = new JFrame("AdVenture Satanist");
 
 		frame.setContentPane(gui);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("images/adv_satan_icon.png"));
 		frame.setLocation(500, 400);
 		frame.setSize(500, 350);
 		frame.setResizable(false);
 		frame.setVisible(true);
-		
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				s.close();
-				saveGame();
-			}
-		});
 	}
 
 	public static void main(String[] args) {
-		new Game();
+		Game g = loadGame();
+		if (isPreviousSave) {
+			gui = new Ad_GUI(g);
+			shop = new ItemShop(g);
+			newShop = new ItemShop_v2(g);
+			shop.setVisible(false);
+			newShop.setVisible(false);
+
+			JFrame frame = new JFrame("AdVenture Satanist");
+
+			frame.setContentPane(gui);
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+			frame.setIconImage(Toolkit.getDefaultToolkit().getImage("images/adv_satan_icon.png"));
+			frame.setLocation(500, 400);
+			frame.setSize(500, 350);
+			frame.setResizable(false);
+			frame.setVisible(true);
+		}
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				s.close();
+				saveGame(g);
+				System.exit(0);
+			}
+		});
 	}
 
 	public void update(int code, int index) {
@@ -124,10 +163,6 @@ public class Game {
 			player.buyManager(businesses.get(j), managers.remove(index));
 			break;
 		}
-	}
-
-	public static void saveGame() {
-		// TODO save game to a file
 	}
 	
 	public List<Business> getBusinesses() {
@@ -172,5 +207,43 @@ public class Game {
 	
 	public Scanner getScanner() {
 		return s;
+	}
+	
+	private static void saveGame(Game g) {
+		try {
+			FileOutputStream fileOut = new FileOutputStream("files/savedGame.ser");
+			ObjectOutputStream output = new ObjectOutputStream(fileOut);
+			output.writeObject(g);
+			output.close();
+			fileOut.close();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "ERROR! Could not save game! Exiting Program...", e.getLocalizedMessage()
+					, JOptionPane.ERROR_MESSAGE);
+		}
+		
+	}
+	
+	private static Game loadGame() {
+		try {
+			FileInputStream fileIn = new FileInputStream("files/savedGame.ser");
+			ObjectInputStream input = new ObjectInputStream(fileIn);
+			Game g = (Game) input.readObject();
+			input.close();
+			fileIn.close();
+			isPreviousSave = true;
+			return g;
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Could not find an existing save file! Starting a new game..."
+					, e.getLocalizedMessage(), JOptionPane.ERROR_MESSAGE);
+			return new Game();
+		} catch (ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(null, "Could not find a game object! Starting a new game..."
+					, e.getLocalizedMessage(), JOptionPane.ERROR_MESSAGE);
+			return new Game();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "An unknown error occurred while loading the save file! Starting a new game..."
+					, e.getLocalizedMessage(), JOptionPane.ERROR_MESSAGE);
+			return new Game();
+		}
 	}
 }

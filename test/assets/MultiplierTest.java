@@ -18,7 +18,7 @@ class MultiplierTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		pentagrams = new Business(0.25, 0.50, 1, true, "Pentagrams");
+		pentagrams = new Business(0.25, 0.50, 1, true, "Pentagrams", null);
 		cultMembers = new Multiplier(1.50, 3, "Cult Members");
 		p1 = new Player("Test Player");
 	}

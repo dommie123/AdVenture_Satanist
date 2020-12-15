@@ -27,7 +27,7 @@ public class Ad_GUI extends JPanel {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 12L;
 	private boolean pentagramsDone = true;
 	private boolean portalsDone = true;
 	private boolean soulsDone = true;
@@ -35,11 +35,11 @@ public class Ad_GUI extends JPanel {
 	private boolean bloodBathsDone = true;
 	
 	// SwingWorkers for each of the progress bars in the GUI.
-	private Worker worker0;
-	private Worker worker1;
-	private Worker worker2;
-	private Worker worker3;
-	private Worker worker4;
+	private transient Worker worker0;
+	private transient Worker worker1;
+	private transient Worker worker2;
+	private transient Worker worker3;
+	private transient Worker worker4;
 	
 	private List<Worker> workers = new ArrayList<Worker>(Arrays.asList(new Worker(), new Worker(), new Worker()
 									, new Worker(), new Worker()));

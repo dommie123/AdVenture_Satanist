@@ -1,9 +1,15 @@
 package assets;
 
+import java.io.Serializable;
+
 import game.Player;
 
-public class Demons extends Multiplier {
+public class Demons extends Multiplier implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6926854800577502049L;
 	private int quantityPurchased;
 	private int quantityCanPurchase;
 	private double totalMultiplier;
@@ -11,7 +17,7 @@ public class Demons extends Multiplier {
 	private double value;
 
 	public Demons(double value) {
-		super(100000, value, "Demon");
+		super(100000000, value, "Demon");
 		quantityPurchased = 0;
 		this.value = value;
 
@@ -21,12 +27,12 @@ public class Demons extends Multiplier {
 	
 	public void update(Player p) {
 		double moneyEarned = p.getMoneyEarned() - mIV;
-		if (moneyEarned >= 100000) {
+		if (moneyEarned >= 100000000) {
 			while (moneyEarned > 0) {
-				if (moneyEarned - 100000 < 0) break;
-				else moneyEarned -= 100000;
+				if (moneyEarned - 100000000 < 0) break;
+				else moneyEarned -= 100000000;
 				quantityCanPurchase++;
-				mIV += 100000;
+				mIV += 100000000;
 			}
 		}
 		totalMultiplier = value * quantityPurchased + 1;

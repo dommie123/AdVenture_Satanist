@@ -78,7 +78,7 @@ public class CircleButton extends JButton {
 
 	@Override
 	public void paintComponent(Graphics g) {
-
+		
 		int diameter = getDiameter();
 		int radius = diameter / 2;
 

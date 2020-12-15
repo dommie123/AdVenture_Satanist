@@ -2,11 +2,16 @@ package assets;
 
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 
-public class SpeedBoost implements Purchasable {
+public class SpeedBoost implements Purchasable, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2104589478341101987L;
 	private double value; // The value of the multiplier (i.e. 2 is doubled, 3 is tripled)
 	private long length; // The length of time (could be minutes or hours depending on method used)
 	private double cost;

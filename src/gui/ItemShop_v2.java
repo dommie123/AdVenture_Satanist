@@ -3,6 +3,7 @@ package gui;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
 import net.miginfocom.swing.MigLayout;
@@ -137,5 +138,21 @@ public class ItemShop_v2 extends JFrame {
 		
 		JButton btnDemonInvestors = new JButton("Demon Investors");
 		contentPane.add(btnDemonInvestors, "cell 2 4,growx");
+		
+		int delay = 1000;
+		ActionListener updateShop = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (SpeedBoost b : game.getBoosts()) {
+					if (!b.isPurchased() && !modelBoosts.contains(b)) {
+						modelBoosts.add(game.getBoosts().indexOf(b), b);
+						
+					}
+				}
+			}
+			
+		};
+		new Timer(delay, updateShop).start();
 	}
 }

@@ -1,9 +1,14 @@
 package assets;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-public class Multiplier implements Purchasable {
+public class Multiplier implements Purchasable, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4436738214317638733L;
 	private double cost;
 	private double value;
 	private String name;

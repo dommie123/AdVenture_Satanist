@@ -1,8 +1,15 @@
 package assets;
 
+import java.io.Serializable;
 import java.text.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Business implements Purchasable {
+public class Business implements Purchasable, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5971155142414201282L;
 	private double currentCost;
 	private double initialCost;
 	private double initialRevenue;
@@ -15,8 +22,10 @@ public class Business implements Purchasable {
 	private boolean autoManaged;
 	private String name;
 	private DecimalFormat currency = (DecimalFormat) NumberFormat.getCurrencyInstance();
+	private List<HiddenMultiplier> multipliers;
 
-	public Business(double cost, double revenue, double waitTime, boolean isStarter, String name) {
+	public Business(double cost, double revenue, double waitTime, boolean isStarter
+			, String name, ArrayList<HiddenMultiplier> multipliers) {
 		this.isStarter = isStarter;
 		autoManaged = false;
 		multiplier = 1;
@@ -42,6 +51,7 @@ public class Business implements Purchasable {
 		}
 		
 		this.waitTime = waitTime;
+		this.multipliers = multipliers;
 		this.name = name;
 	}
 
@@ -56,6 +66,13 @@ public class Business implements Purchasable {
 			initialRevenue *= multiplier;
 		
 		currentCost = initialCost * costMultiplier;
+		
+		for (HiddenMultiplier h : multipliers) {
+			if (quantityPurchased >= h.getBusinessesRequired() && !h.isTriggered()) {
+				h.activateTrigger();
+				multiplier *= h.getValue();
+			}
+		}
 	}
 	
 	public boolean isPurchased() {
@@ -92,6 +109,10 @@ public class Business implements Purchasable {
 
 	public double getMultiplier() {
 		return multiplier;
+	}
+	
+	public List<HiddenMultiplier> getMultipliers() {
+		return multipliers;
 	}
 
 	public void setMultiplier(double multiplier) {
