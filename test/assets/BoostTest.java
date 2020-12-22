@@ -20,7 +20,7 @@ class BoostTest {
 	private SpeedBoost midBoost;
 	private SpeedBoost longBoost;
 	
-	private List<Business> businesses = Arrays.asList(new Business(0, 5, 0, false, "Test", null));
+	private List<Business> businesses = Arrays.asList(new Business(0, 5, 0, false, "Test", null, null));
 	
 	private Game game;
 	

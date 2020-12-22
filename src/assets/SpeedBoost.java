@@ -23,7 +23,7 @@ public class SpeedBoost implements Purchasable, Serializable {
 	
 	private final DecimalFormat currency = (DecimalFormat) NumberFormat.getCurrencyInstance();
 
-	public SpeedBoost(int value, long length, double cost, String name) {
+	public SpeedBoost(double value, long length, double cost, String name) {
 		this.value = value;
 		this.length = length;
 		this.cost = cost;

@@ -43,21 +43,39 @@ public class Game implements Serializable {
 	public Game() {		
 		if (!isPreviousSave) {
 
-			businesses = new ArrayList<Business>(Arrays.asList(new Business(4.00, 0.50, 1, true, "Pentagrams", new ArrayList<HiddenMultiplier>(Arrays.asList(
-							new HiddenMultiplier(2, 10), new HiddenMultiplier(1.5, 20), new HiddenMultiplier(3, 40)
-							, new HiddenMultiplier(4, 50), new HiddenMultiplier(1.2, 80), new HiddenMultiplier(10, 100)))),
-					new Business(25.00, 2, 2, false, "Hell Portals", new ArrayList<HiddenMultiplier>(Arrays.asList(
-							new HiddenMultiplier(1.5, 10), new HiddenMultiplier(2, 30), new HiddenMultiplier(2.9, 40)
-							, new HiddenMultiplier(4, 60), new HiddenMultiplier(6.66, 90)))),
-					new Business(150.00, 10, 5, false, "Candied Souls", new ArrayList<HiddenMultiplier>(Arrays.asList(
-							new HiddenMultiplier(2.1, 10), new HiddenMultiplier(1.2, 20), new HiddenMultiplier(1.5, 30)
-							, new HiddenMultiplier(1.7, 40), new HiddenMultiplier(2.2, 50), new HiddenMultiplier(1.9, 70)
-							, new HiddenMultiplier(3, 80), new HiddenMultiplier(2.7, 90), new HiddenMultiplier(5, 100)))),
-					new Business(1020, 50, 30, false, "Metal Bands", new ArrayList<HiddenMultiplier>(Arrays.asList(
-							new HiddenMultiplier(10, 40), new HiddenMultiplier(5.6, 60), new HiddenMultiplier(6.66, 90)))),
-					new Business(9990, 400, 120, false, "BloodBaths", new ArrayList<HiddenMultiplier>(Arrays.asList(
-							new HiddenMultiplier(1.5, 10), new HiddenMultiplier(3, 30), new HiddenMultiplier(4, 40)
-							, new HiddenMultiplier(6.66, 60), new HiddenMultiplier(7, 70), new HiddenMultiplier(9.99, 90))))));
+			businesses = new ArrayList<Business>(Arrays.asList(
+					new Business(4.00, 0.50, 1, true, "Pentagrams", new ArrayList<HiddenMultiplier>(Arrays.asList(
+							new HiddenMultiplier(2, 10), new HiddenMultiplier(1.5, 20), new HiddenMultiplier(3, 40),
+							new HiddenMultiplier(4, 50), new HiddenMultiplier(1.2, 80), new HiddenMultiplier(10, 100))),
+							new ArrayList<HiddenBoost>(Arrays.asList(new HiddenBoost(2, 30), new HiddenBoost(1.5, 60),
+									new HiddenBoost(2, 70), new HiddenBoost(3, 90)))),
+					new Business(25.00, 2, 2, false, "Hell Portals",
+							new ArrayList<HiddenMultiplier>(Arrays.asList(new HiddenMultiplier(1.5, 10),
+									new HiddenMultiplier(2, 30), new HiddenMultiplier(2.9, 40),
+									new HiddenMultiplier(4, 60), new HiddenMultiplier(6.66, 90))),
+							new ArrayList<HiddenBoost>(Arrays.asList(new HiddenBoost(1.5, 20), new HiddenBoost(1.2, 50),
+									new HiddenBoost(1.4, 70), new HiddenBoost(1.1, 80), new HiddenBoost(4, 100)))),
+					new Business(150.00, 10, 5, false, "Candied Souls",
+							new ArrayList<HiddenMultiplier>(Arrays.asList(new HiddenMultiplier(2.1, 10),
+									new HiddenMultiplier(1.2, 20), new HiddenMultiplier(1.5, 30),
+									new HiddenMultiplier(1.7, 40), new HiddenMultiplier(2.2, 50),
+									new HiddenMultiplier(1.9, 70), new HiddenMultiplier(3, 80),
+									new HiddenMultiplier(2.7, 90), new HiddenMultiplier(5, 100))),
+							new ArrayList<HiddenBoost>(Arrays.asList(new HiddenBoost(4.5, 60)))),
+					new Business(1020, 50, 30, false, "Metal Bands",
+							new ArrayList<HiddenMultiplier>(Arrays.asList(new HiddenMultiplier(10, 40),
+									new HiddenMultiplier(5.6, 60), new HiddenMultiplier(6.66, 90))),
+							new ArrayList<HiddenBoost>(Arrays.asList(new HiddenBoost(2.5, 10), new HiddenBoost(3, 20),
+									new HiddenBoost(2.1, 30), new HiddenBoost(5, 50), new HiddenBoost(6.66, 70),
+									new HiddenBoost(3.5, 80), new HiddenBoost(10, 100)))),
+					new Business(9990, 400, 120, false, "BloodBaths",
+							new ArrayList<HiddenMultiplier>(
+									Arrays.asList(new HiddenMultiplier(1.5, 10), new HiddenMultiplier(3, 30),
+											new HiddenMultiplier(4, 40), new HiddenMultiplier(6.66, 60),
+											new HiddenMultiplier(7, 70), new HiddenMultiplier(9.99, 90))),
+							new ArrayList<HiddenBoost>(Arrays.asList(new HiddenBoost(6.66, 20),
+									new HiddenBoost(1.2, 50), new HiddenBoost(2.7, 80), new HiddenBoost(5, 100))))));
+			
 			multipliers = new ArrayList<Multiplier>(Arrays.asList(new Multiplier(20, 3.5, "Extra Candles"),
 					new Multiplier(100, 4, "Flint and Steel"), new Multiplier(550, 4, "Corruption"),
 					new Multiplier(6660, 7.77, "Golden Fiddles"), new Multiplier(20000, 4.1, "Bigger Chainsaws")));
@@ -149,7 +167,8 @@ public class Game implements Serializable {
 			if (multipliers.get(index).isPurchased()) purchasedMultipliers.add(multipliers.remove(index));
 			break;
 		case 5:
-			player.buySpeedBoost(businesses, boosts.remove(index));
+			player.buySpeedBoost(businesses, boosts.get(index));
+			if (boosts.get(index).isPurchased()) boosts.remove(index);
 			break;
 		case 6: 
 			player.buyDemons(businesses, multipliers, boosts, demons);
@@ -160,7 +179,8 @@ public class Game implements Serializable {
 				if (j + 1 >= businesses.size()) j = 0;
 				else j++;
 			}
-			player.buyManager(businesses.get(j), managers.remove(index));
+			player.buyManager(businesses.get(j), managers.get(index));
+			if (managers.get(index).isPurchased()) managers.remove(index);
 			break;
 		}
 	}

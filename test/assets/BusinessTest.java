@@ -19,7 +19,9 @@ class BusinessTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		pentagrams = new Business(0.25, 0.5, 1.0, true, "Pentagrams", new ArrayList<HiddenMultiplier>(Arrays.asList(new HiddenMultiplier(2, 10), new HiddenMultiplier(3, 20))));
+		pentagrams = new Business(0.25, 0.5, 1.0, true, "Pentagrams", new ArrayList<HiddenMultiplier>(
+				Arrays.asList(new HiddenMultiplier(2, 10), new HiddenMultiplier(3, 20))), new ArrayList<HiddenBoost>(Arrays.asList(
+						new HiddenBoost(2, 30), new HiddenBoost(3, 40))));
 		p1 = new Player("Test Player");
 	}
 

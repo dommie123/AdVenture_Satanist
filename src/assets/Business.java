@@ -23,9 +23,10 @@ public class Business implements Purchasable, Serializable {
 	private String name;
 	private DecimalFormat currency = (DecimalFormat) NumberFormat.getCurrencyInstance();
 	private List<HiddenMultiplier> multipliers;
+	private List<HiddenBoost> speedBoosts;
 
 	public Business(double cost, double revenue, double waitTime, boolean isStarter
-			, String name, ArrayList<HiddenMultiplier> multipliers) {
+			, String name, ArrayList<HiddenMultiplier> multipliers, ArrayList<HiddenBoost> speedBoosts) {
 		this.isStarter = isStarter;
 		autoManaged = false;
 		multiplier = 1;
@@ -52,6 +53,7 @@ public class Business implements Purchasable, Serializable {
 		
 		this.waitTime = waitTime;
 		this.multipliers = multipliers;
+		this.speedBoosts = speedBoosts;
 		this.name = name;
 	}
 

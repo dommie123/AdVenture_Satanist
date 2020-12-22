@@ -55,7 +55,7 @@ public class ItemShop extends JFrame {
 		btnDebug.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Business dBusiness = new Business(0, 0, 0, true, "Debug", null);
+					Business dBusiness = new Business(0, 0, 0, true, "Debug", null, null);
 					
 					if (txtDebug.getText().equals("expireAll")) {
 						for (int i = 0; i < 5; i++) {

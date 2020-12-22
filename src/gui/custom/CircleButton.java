@@ -1,10 +1,14 @@
 package gui.custom;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.awt.FontMetrics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -17,12 +21,60 @@ public class CircleButton extends JButton {
 	private static final long serialVersionUID = -91854781551352553L;
 	private boolean mouseOver = false;
 	private boolean mousePressed = false;
-
+	private boolean hasIcon;
+	private ImageIcon icon;
+	
 	public CircleButton(String text) {
 		super(text);
 		setOpaque(false);
 		setFocusPainted(false);
 		setBorderPainted(false);
+		hasIcon = false;
+
+		MouseAdapter mouseListener = new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent me) {
+				if (contains(me.getX(), me.getY())) {
+					mousePressed = true;
+					repaint();
+				}
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent me) {
+				mousePressed = false;
+				repaint();
+			}
+
+			@Override
+			public void mouseExited(MouseEvent me) {
+				mouseOver = false;
+				mousePressed = false;
+				repaint();
+			}
+
+			@Override
+			public void mouseMoved(MouseEvent me) {
+				mouseOver = contains(me.getX(), me.getY());
+				repaint();
+			}
+		};
+
+		addMouseListener(mouseListener);
+		addMouseMotionListener(mouseListener);
+	}
+	
+	public CircleButton(ImageIcon icon) {
+		super(icon);
+		setOpaque(false);
+		setFocusPainted(false);
+		setBorderPainted(false);
+		
+		Image img = icon.getImage().getScaledInstance(icon.getIconWidth() / 2, icon.getIconHeight() / 2, 0);
+		icon.setImage(img);
+		this.icon = icon;
+		hasIcon = true;
 
 		MouseAdapter mouseListener = new MouseAdapter() {
 
@@ -59,7 +111,7 @@ public class CircleButton extends JButton {
 	}
 
 	private int getDiameter() {
-		int diameter = Math.min(getWidth(), getHeight());
+		int diameter = Math.min(getWidth(), getHeight()) - 10;
 		return diameter;
 	}
 
@@ -81,21 +133,34 @@ public class CircleButton extends JButton {
 		
 		int diameter = getDiameter();
 		int radius = diameter / 2;
-
-		if (mousePressed) {
-			g.setColor(Color.LIGHT_GRAY);
-		} else {
+		int x = getWidth() / 2 - radius;
+		int y = getHeight() / 2 - radius;
+		
+		if (hasIcon) {
 			g.setColor(Color.WHITE);
+			g.fillOval(x, y, diameter, diameter);
+			g.setClip(new Ellipse2D.Float(x, y, diameter, diameter));
+			g.drawImage(icon.getImage(), x, y, icon.getIconWidth(), icon.getIconHeight(), icon.getImageObserver());
+		} else {
+			if (mousePressed) {
+				g.setColor(Color.RED);
+			} else {
+				g.setColor(Color.ORANGE);
+			}
+			g.fillOval(x, y, diameter, diameter);
 		}
-		g.fillOval(getWidth() / 2 - radius, getHeight() / 2 - radius, diameter, diameter);
-
+		
 		if (mouseOver) {
-			g.setColor(Color.BLUE);
+			g.setColor(Color.RED);
 		} else {
 			g.setColor(Color.BLACK);
 		}
-		g.drawOval(getWidth() / 2 - radius, getHeight() / 2 - radius, diameter, diameter);
-
+		
+		if (mousePressed && hasIcon) {
+			g.setColor(Color.WHITE);
+		}
+		g.drawOval(x, y, diameter, diameter);
+		
 		g.setColor(Color.BLACK);
 		g.setFont(getFont());
 		FontMetrics metrics = g.getFontMetrics(getFont());
