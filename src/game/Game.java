@@ -74,17 +74,41 @@ public class Game implements Serializable {
 											new HiddenMultiplier(4, 40), new HiddenMultiplier(6.66, 60),
 											new HiddenMultiplier(7, 70), new HiddenMultiplier(9.99, 90))),
 							new ArrayList<HiddenBoost>(Arrays.asList(new HiddenBoost(6.66, 20),
-									new HiddenBoost(1.2, 50), new HiddenBoost(2.7, 80), new HiddenBoost(5, 100))))));
+									new HiddenBoost(1.2, 50), new HiddenBoost(2.7, 80), new HiddenBoost(5, 100)))),
+					new Business(24000, 4500, 600, false, "Furnaces",
+							new ArrayList<HiddenMultiplier>(Arrays.asList(new HiddenMultiplier(5, 20),
+									new HiddenMultiplier(6, 30), new HiddenMultiplier(9.99, 70),
+									new HiddenMultiplier(15, 90))),
+							new ArrayList<HiddenBoost>(Arrays.asList(new HiddenBoost(2.2, 10), new HiddenBoost(4, 40),
+									new HiddenBoost(3, 50), new HiddenBoost(6.66, 60),
+									new HiddenBoost(2.6, 80), new HiddenBoost(10, 100)))),
+					new Business(72000, 15000, 3600, false, "Lava Jacuzzis",
+							new ArrayList<HiddenMultiplier>(Arrays.asList(new HiddenMultiplier(3.5, 10),
+									new HiddenMultiplier(3, 20), new HiddenMultiplier(6.66, 60),
+									new HiddenMultiplier(1.2, 70), new HiddenMultiplier(10, 80))),
+							new ArrayList<HiddenBoost>(Arrays.asList(new HiddenBoost(2.5, 30), new HiddenBoost(4, 40),
+									new HiddenBoost(3, 50), new HiddenBoost(2.6, 90), new HiddenBoost(10, 100)))),
+					new Business(666666, 66666, 21600, false, "Fake Judgements",
+							new ArrayList<HiddenMultiplier>(Arrays.asList(new HiddenMultiplier(6.66, 10),
+									new HiddenMultiplier(6.66, 30), new HiddenMultiplier(6.66, 50),
+									new HiddenMultiplier(6.66, 70), new HiddenMultiplier(9.99, 90))),
+							new ArrayList<HiddenBoost>(Arrays.asList(new HiddenBoost(6.66, 20),
+									new HiddenBoost(6.66, 40), new HiddenBoost(6.66, 60), new HiddenBoost(6.66, 80),
+									new HiddenBoost(9.99, 100))))));
 			
 			multipliers = new ArrayList<Multiplier>(Arrays.asList(new Multiplier(20, 3.5, "Extra Candles"),
 					new Multiplier(100, 4, "Flint and Steel"), new Multiplier(550, 4, "Corruption"),
-					new Multiplier(6660, 7.77, "Golden Fiddles"), new Multiplier(20000, 4.1, "Bigger Chainsaws")));
+					new Multiplier(6660, 7.77, "Golden Fiddles"), new Multiplier(20000, 4.1, "Bigger Chainsaws"), 
+					new Multiplier(80000, 3.5, "Blast Furnaces"), new Multiplier(150000, 2.9, "Anti-Menorahs"), 
+					new Multiplier(666666, 9.99, "Convincing Signatures")));
 			boosts = new ArrayList<SpeedBoost>(Arrays.asList(new SpeedBoost(2, 1, 500, "1 hr. Boost"),
 					new SpeedBoost(2, 4, 1500, "4 hr. Boost"), new SpeedBoost(2, 12, 8000, "12 hr. Boost"),
 					new SpeedBoost(2, 24, 25000, "24 hr. Boost"), new SpeedBoost(2, 72, 75000, "3 day Boost")));
 			managers = new ArrayList<Manager>(Arrays.asList(new Manager(150, "Face McStabby"),
 					new Manager(1200, "Minecart Paul"), new Manager(9500, "Red W&W"),
-					new Manager(60000, "Mars Tookmalut"), new Manager(240000, "Count Vlad")));
+					new Manager(60000, "Mars Tookmalut"), new Manager(240000, "Count Vlad"), 
+					new Manager(1200000, "Mr. Glassman"), new Manager(3000000, "Scorps"),
+					new Manager(66666666, "The Devil")));
 			demons = new Demons(0.15);
 			purchasedMultipliers = new ArrayList<Multiplier>();
 
@@ -109,7 +133,7 @@ public class Game implements Serializable {
 
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("images/adv_satan_icon.png"));
 		frame.setLocation(500, 400);
-		frame.setSize(500, 350);
+		frame.setSize(500, 500);
 		frame.setResizable(false);
 		frame.setVisible(true);
 	}
@@ -130,7 +154,7 @@ public class Game implements Serializable {
 
 			frame.setIconImage(Toolkit.getDefaultToolkit().getImage("images/adv_satan_icon.png"));
 			frame.setLocation(500, 400);
-			frame.setSize(500, 350);
+			frame.setSize(500, 500);
 			frame.setResizable(false);
 			frame.setVisible(true);
 		}

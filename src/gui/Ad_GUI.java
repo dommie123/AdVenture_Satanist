@@ -3,7 +3,12 @@ package gui;
 import javax.swing.JProgressBar;
 
 import game.Game;
-import javax.swing.JButton;
+import gui.custom.CircleButton;
+import gui.custom.ProgressUI;
+import gui.custom.RoundedRectangleButton;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
@@ -19,8 +24,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class Ad_GUI extends JPanel {
 
@@ -33,6 +41,9 @@ public class Ad_GUI extends JPanel {
 	private boolean soulsDone = true;
 	private boolean metalBandsDone = true;
 	private boolean bloodBathsDone = true;
+	private boolean furnacesDone = true;
+	private boolean jacuzzisDone = true;
+	private boolean judgementsDone = true;
 	
 	// SwingWorkers for each of the progress bars in the GUI.
 	private transient Worker worker0;
@@ -40,9 +51,21 @@ public class Ad_GUI extends JPanel {
 	private transient Worker worker2;
 	private transient Worker worker3;
 	private transient Worker worker4;
+	private transient Worker worker5;
+	private transient Worker worker6;
+	private transient Worker worker7;
+	
+	private String pentagramsPurchased;
+	private String portalsPurchased;
+	private String soulsPurchased;
+	private String metalBandsPurchased;
+	private String bloodBathsPurchased;
+	private String furnacesPurchased;
+	private String jacuzzisPurchased;
+	private String judgementsPurchased;
 	
 	private List<Worker> workers = new ArrayList<Worker>(Arrays.asList(new Worker(), new Worker(), new Worker()
-									, new Worker(), new Worker()));
+									, new Worker(), new Worker(), new Worker(), new Worker(), new Worker()));
 	
 	public Timer guiTimer;
 
@@ -52,43 +75,109 @@ public class Ad_GUI extends JPanel {
 	 */
 	public Ad_GUI(Game game) {
 		this.game = game;
-		setLayout(new MigLayout("", "[150px][158.00px][136.00px]", "[60px][][][][][][][][][60px][][]"));
-		setBackground(Color.RED);
+		setLayout(new MigLayout("", "[150px][158.00px][136.00px]", "[60px][][][][][][][][][][][][60px][][][][][][][][][]"));
+		setBackground(Color.ORANGE);
 
 		JLabel lblName = new JLabel("Player: " + game.getPlayer().getName());
+		lblName.setFont(new Font("Permanent Marker", Font.PLAIN, 15));
+		lblName.setForeground(Color.WHITE);
 		add(lblName, "cell 0 0,alignx left,aligny top");
 
 		JLabel lblAdventure = new JLabel("AdVenture");
+		lblAdventure.setForeground(Color.WHITE);
 		lblAdventure.setFont(new Font("Limelight", Font.PLAIN, 24));
 		add(lblAdventure, "cell 1 0");
 
 		JLabel lblMoney = new JLabel("Money: " + game.getPlayer().getMoneyAsString());
+		lblMoney.setForeground(Color.WHITE);
+		lblMoney.setFont(new Font("Permanent Marker", Font.PLAIN, 15));
 		add(lblMoney, "cell 2 0,alignx right,aligny top");
 				
 		JLabel lblSatanist = new JLabel("Satanist!");
+		lblSatanist.setForeground(Color.WHITE);
 		lblSatanist.setFont(new Font("Limelight", Font.PLAIN, 24));
 		add(lblSatanist, "cell 1 1");
 				
 		JLabel lblDemons = new JLabel(game.getDemons().toString());
+		lblDemons.setForeground(Color.WHITE);
+		lblDemons.setFont(new Font("Permanent Marker", Font.PLAIN, 15));
 		add(lblDemons, "cell 2 1,alignx right,aligny top");
 		
 		JProgressBar progressPentagrams = new JProgressBar(0, 100);
+//		progressPentagrams.getGraphics().setClip(new RoundRectangle2D.Float(
+//				progressPentagrams.getX(), progressPentagrams.getY(), progressPentagrams.getWidth(),
+//				progressPentagrams.getHeight(), 10, 10));
+		progressPentagrams.setBackground(new Color(255, 140, 0, 255));
+		progressPentagrams.setUI(new ProgressUI());
+		progressPentagrams.setBorder(BorderFactory.createEmptyBorder());
 		add(progressPentagrams, "cell 1 4,growx");
 		
 		JProgressBar progressPortals = new JProgressBar(0, 100);
+//		progressPortals.getGraphics().setClip(new RoundRectangle2D.Float(
+//				progressPortals.getX(), progressPortals.getY(), progressPortals.getWidth(),
+//				progressPortals.getHeight(), 10, 10));
+		progressPortals.setBackground(new Color(255, 140, 0, 255));
+		progressPortals.setUI(new ProgressUI());
+		progressPortals.setBorder(BorderFactory.createEmptyBorder());
 		add(progressPortals, "cell 1 5,growx");
 		
 		JProgressBar progressSouls = new JProgressBar(0, 100);
+//		progressSouls.getGraphics().setClip(new RoundRectangle2D.Float(
+//				progressSouls.getX(), progressSouls.getY(), progressSouls.getWidth(),
+//				progressSouls.getHeight(), 10, 10));
+		progressSouls.setBackground(new Color(255, 140, 0, 255));
+		progressSouls.setUI(new ProgressUI());
+		progressSouls.setBorder(BorderFactory.createEmptyBorder());
 		add(progressSouls, "cell 1 6,growx");
 		
 		JProgressBar progressMetalBands = new JProgressBar(0, 100);
+//		progressMetalBands.getGraphics().setClip(new RoundRectangle2D.Float(
+//				progressMetalBands.getX(), progressMetalBands.getY(), progressMetalBands.getWidth(),
+//				progressMetalBands.getHeight(), 10, 10));
+		progressMetalBands.setBackground(new Color(255, 140, 0, 255));
+		progressMetalBands.setUI(new ProgressUI());
+		progressMetalBands.setBorder(BorderFactory.createEmptyBorder());
 		add(progressMetalBands, "cell 1 7,growx");
 		
 		JProgressBar progressBloodBaths = new JProgressBar(0, 100);
+//		progressBloodBaths.getGraphics().setClip(new RoundRectangle2D.Float(
+//				progressBloodBaths.getX(), progressBloodBaths.getY(), progressBloodBaths.getWidth(),
+//				progressBloodBaths.getHeight(), 10, 10));
+		progressBloodBaths.setBackground(new Color(255, 140, 0, 255));
+		progressBloodBaths.setUI(new ProgressUI());
+		progressBloodBaths.setBorder(BorderFactory.createEmptyBorder());
 		add(progressBloodBaths, "cell 1 8,growx");
 		
+		JProgressBar progressFurnaces = new JProgressBar(0, 100);
+//		progressFurnaces.getGraphics().setClip(new RoundRectangle2D.Float(
+//				progressFurnaces.getX(), progressFurnaces.getY(), progressFurnaces.getWidth(),
+//				progressFurnaces.getHeight(), 10, 10));
+		progressFurnaces.setBackground(new Color(255, 140, 0, 255));
+		progressFurnaces.setUI(new ProgressUI());
+		progressFurnaces.setBorder(BorderFactory.createEmptyBorder());
+		add(progressFurnaces, "cell 1 9,growx");
+		
+		JProgressBar progressJacuzzis = new JProgressBar(0, 100);
+//		progressJacuzzis.getGraphics().setClip(new RoundRectangle2D.Float(
+//				progressJacuzzis.getX(), progressJacuzzis.getY(), progressJacuzzis.getWidth(),
+//				progressJacuzzis.getHeight(), 10, 10));
+		progressJacuzzis.setBackground(new Color(255, 140, 0, 255));
+		progressJacuzzis.setUI(new ProgressUI());
+		progressJacuzzis.setBorder(BorderFactory.createEmptyBorder());
+		add(progressJacuzzis, "cell 1 10,growx");
+		
+		JProgressBar progressJudgements = new JProgressBar(0, 100);
+//		progressJudgements.getGraphics().setClip(new RoundRectangle2D.Float(
+//				progressJudgements.getX(), progressJudgements.getY(), progressJudgements.getWidth(),
+//				progressJudgements.getHeight(), 10, 10));
+		progressJudgements.setBackground(new Color(255, 140, 0, 255));
+		progressJudgements.setUI(new ProgressUI());
+		progressJudgements.setBorder(BorderFactory.createEmptyBorder());
+		add(progressJudgements, "cell 1 11,growx");
+		
 		// Triggers a background thread for updating the progress bar
-		JButton btnPentagrams = new JButton(game.getBusinessByIndex(0).toString());
+		pentagramsPurchased = String.valueOf(game.getBusinessByIndex(0).getQuantityPurchased());
+		CircleButton btnPentagrams = new CircleButton(pentagramsPurchased, new ImageIcon("images/pentagrams.png"));
 		btnPentagrams.addActionListener(l -> {
 			btnPentagrams.setEnabled(false);
 			pentagramsDone = false;
@@ -119,19 +208,20 @@ public class Ad_GUI extends JPanel {
 		});
 		add(btnPentagrams, "cell 0 4,growx");
 		
-		JButton btnBuyPentagrams = new JButton("Buy 1 (" + game.getBusinessByIndex(0).getCostAsString() + ")");
+		RoundedRectangleButton btnBuyPentagrams = new RoundedRectangleButton("Buy 1 (" + game.getBusinessByIndex(0).getCostAsString() + ")");
 		btnBuyPentagrams.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.update(1, 0);
 				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
-				btnPentagrams.setText(game.getBusinessByIndex(0).toString());
+				pentagramsPurchased = String.valueOf(game.getBusinessByIndex(0).getQuantityPurchased());
+				btnPentagrams.setText(pentagramsPurchased);
 				btnBuyPentagrams.setText("Buy 1 (" + game.getBusinessByIndex(0).getCostAsString() + ")");
 			}
 		});
 		add(btnBuyPentagrams, "cell 2 4,growx");
 		
-		JButton btnPortals = new JButton(game.getBusinessByIndex(1).toString());
-		btnPortals.setEnabled(false);
+		portalsPurchased = String.valueOf(game.getBusinessByIndex(1).getQuantityPurchased());
+		CircleButton btnPortals = new CircleButton(portalsPurchased, new ImageIcon("images/portals.png"));
 		btnPortals.addActionListener(l -> {
 			btnPortals.setEnabled(false);
 			portalsDone = false;
@@ -157,22 +247,24 @@ public class Ad_GUI extends JPanel {
 				}
 			});
 		});
+		if (!game.getBusinessByIndex(1).isPurchased()) btnPortals.setEnabled(false);
 		add(btnPortals, "cell 0 5,growx");
 		
-		JButton btnBuyPortals = new JButton("Buy 1 (" + game.getBusinessByIndex(1).getCostAsString() + ")");
+		RoundedRectangleButton btnBuyPortals = new RoundedRectangleButton("Buy 1 (" + game.getBusinessByIndex(1).getCostAsString() + ")");
 		btnBuyPortals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.update(1, 1);
 				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
-				btnPortals.setText(game.getBusinessByIndex(1).toString());
+				portalsPurchased = String.valueOf(game.getBusinessByIndex(1).getQuantityPurchased());
+				btnPortals.setText(portalsPurchased);
 				btnBuyPortals.setText("Buy 1 (" + game.getBusinessByIndex(1).getCostAsString() + ")");
 				if (!btnPortals.isEnabled() && game.getBusinessByIndex(1).isPurchased()) btnPortals.setEnabled(true);
 			}
 		});
 		add(btnBuyPortals, "cell 2 5,growx");		
 		
-		JButton btnCandiedSouls = new JButton(game.getBusinessByIndex(2).toString());
-		btnCandiedSouls.setEnabled(false);
+		soulsPurchased = String.valueOf(game.getBusinessByIndex(2).getQuantityPurchased());
+		CircleButton btnCandiedSouls = new CircleButton(soulsPurchased, new ImageIcon("images/souls.png"));
 		btnCandiedSouls.addActionListener(l -> {
 			btnCandiedSouls.setEnabled(false);
 			soulsDone = false;
@@ -198,22 +290,24 @@ public class Ad_GUI extends JPanel {
 				}
 			});
 		});
+		if (!game.getBusinessByIndex(2).isPurchased()) btnCandiedSouls.setEnabled(false);
 		add(btnCandiedSouls, "cell 0 6,growx");
 		
-		JButton btnBuySouls = new JButton("Buy 1 (" + game.getBusinessByIndex(2).getCostAsString() + ")");
+		RoundedRectangleButton btnBuySouls = new RoundedRectangleButton("Buy 1 (" + game.getBusinessByIndex(2).getCostAsString() + ")");
 		btnBuySouls.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.update(1, 2);
 				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
-				btnCandiedSouls.setText(game.getBusinessByIndex(2).toString());
+				soulsPurchased = String.valueOf(game.getBusinessByIndex(2).getQuantityPurchased());
+				btnCandiedSouls.setText(soulsPurchased);
 				btnBuySouls.setText("Buy 1 (" + game.getBusinessByIndex(2).getCostAsString() + ")");
 				if (!btnCandiedSouls.isEnabled() && game.getBusinessByIndex(2).isPurchased()) btnCandiedSouls.setEnabled(true);
 			}
 		});
 		add(btnBuySouls, "cell 2 6,growx");
 		
-		JButton btnMetalBands = new JButton(game.getBusinessByIndex(3).toString());
-		btnMetalBands.setEnabled(false);
+		metalBandsPurchased = String.valueOf(game.getBusinessByIndex(3).getQuantityPurchased());
+		CircleButton btnMetalBands = new CircleButton(metalBandsPurchased, new ImageIcon("images/metal-bands.png"));
 		btnMetalBands.addActionListener(l -> {
 			btnMetalBands.setEnabled(false);
 			metalBandsDone = false;
@@ -239,21 +333,24 @@ public class Ad_GUI extends JPanel {
 				}
 			});
 		});
+		if (!game.getBusinessByIndex(3).isPurchased()) btnMetalBands.setEnabled(false);
 		add(btnMetalBands, "cell 0 7,growx");
 		
-		JButton btnBuyMetalBands = new JButton("Buy 1 (" + game.getBusinessByIndex(3).getCostAsString() + ")");
+		RoundedRectangleButton btnBuyMetalBands = new RoundedRectangleButton("Buy 1 (" + game.getBusinessByIndex(3).getCostAsString() + ")");
 		btnBuyMetalBands.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.update(1, 3);
 				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
-				btnMetalBands.setText(game.getBusinessByIndex(3).toString());
+				metalBandsPurchased = String.valueOf(game.getBusinessByIndex(3).getQuantityPurchased());
+				btnMetalBands.setText(metalBandsPurchased);
 				btnBuyMetalBands.setText("Buy 1 (" + game.getBusinessByIndex(3).getCostAsString() + ")");
 				if (!btnMetalBands.isEnabled() && game.getBusinessByIndex(3).isPurchased()) btnMetalBands.setEnabled(true);
 			}
 		});
 		add(btnBuyMetalBands, "cell 2 7,growx");
 		
-		JButton btnBloodBaths = new JButton(game.getBusinessByIndex(4).toString());
+		bloodBathsPurchased = String.valueOf(game.getBusinessByIndex(4).getQuantityPurchased());
+		CircleButton btnBloodBaths = new CircleButton(bloodBathsPurchased, new ImageIcon("images/baths.png"));
 		btnBloodBaths.addActionListener(l -> {
 			btnBloodBaths.setEnabled(false);
 			bloodBathsDone = false;
@@ -279,22 +376,152 @@ public class Ad_GUI extends JPanel {
 				}
 			});
 		});
-		btnBloodBaths.setEnabled(false);
+		if (!game.getBusinessByIndex(4).isPurchased()) btnBloodBaths.setEnabled(false);
 		add(btnBloodBaths, "cell 0 8,growx");
 		
-		JButton btnBuyBloodBaths = new JButton("Buy 1 (" + game.getBusinessByIndex(4).getCostAsString() + ")");
+		RoundedRectangleButton btnBuyBloodBaths = new RoundedRectangleButton("Buy 1 (" + game.getBusinessByIndex(4).getCostAsString() + ")");
 		btnBuyBloodBaths.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.update(1, 4);
 				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
-				btnBloodBaths.setText(game.getBusinessByIndex(4).toString());
+				bloodBathsPurchased = String.valueOf(game.getBusinessByIndex(4).getQuantityPurchased());
+				btnBloodBaths.setText(bloodBathsPurchased);
 				btnBuyBloodBaths.setText("Buy 1 (" + game.getBusinessByIndex(4).getCostAsString() + ")");
 				if (!btnBloodBaths.isEnabled() && game.getBusinessByIndex(4).isPurchased()) btnBloodBaths.setEnabled(true);
 			}
 		});
 		add(btnBuyBloodBaths, "cell 2 8,growx");
 		
-		JButton btnShop = new JButton("Shop");
+		furnacesPurchased = String.valueOf(game.getBusinessByIndex(5).getQuantityPurchased());
+		CircleButton btnFurnaces = new CircleButton(furnacesPurchased, new ImageIcon("images/furnace.png"));
+		btnFurnaces.addActionListener(l -> {
+			btnFurnaces.setEnabled(false);
+			furnacesDone = false;
+			progressFurnaces.setValue(0);
+			worker5 = workers.remove(0);
+			worker5.execute();
+			
+			worker5.update(10.0 / game.getBusinessByIndex(5).getWaitTime());
+			worker5.addPropertyChangeListener(pcEvent -> {
+				if (pcEvent.getPropertyName().equals("progress")) {
+					int value = (int) pcEvent.getNewValue();
+					progressFurnaces.setValue(value);
+				} else if (pcEvent.getNewValue() == SwingWorker.StateValue.DONE) {
+					game.update(2, 4);
+					furnacesDone = true;
+					lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
+					btnFurnaces.setEnabled(true);
+					progressFurnaces.setValue(progressFurnaces.getMinimum());
+					workers.add(new Worker());
+					if (game.getBusinessByIndex(5).isAutoManaged()) {
+						btnFurnaces.doClick();
+					}
+				}
+			});
+		});
+		if (!game.getBusinessByIndex(5).isPurchased()) btnFurnaces.setEnabled(false);
+		add(btnFurnaces, "cell 0 9,growx");
+		
+		RoundedRectangleButton btnBuyFurnaces = new RoundedRectangleButton("Buy 1 (" + game.getBusinessByIndex(5).getCostAsString() + ")");
+		btnBuyFurnaces.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				game.update(1, 4);
+				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
+				furnacesPurchased = String.valueOf(game.getBusinessByIndex(5).getQuantityPurchased());
+				btnFurnaces.setText(furnacesPurchased);
+				btnBuyFurnaces.setText("Buy 1 (" + game.getBusinessByIndex(5).getCostAsString() + ")");
+				if (!btnFurnaces.isEnabled() && game.getBusinessByIndex(5).isPurchased()) btnFurnaces.setEnabled(true);
+			}
+		});
+		add(btnBuyFurnaces, "cell 2 9,growx");
+		
+		jacuzzisPurchased = String.valueOf(game.getBusinessByIndex(6).getQuantityPurchased());
+		CircleButton btnJacuzzis = new CircleButton(jacuzzisPurchased, new ImageIcon("images/jacuzzis.png"));
+		btnJacuzzis.addActionListener(l -> {
+			btnJacuzzis.setEnabled(false);
+			jacuzzisDone = false;
+			progressJacuzzis.setValue(0);
+			worker6 = workers.remove(0);
+			worker6.execute();
+			
+			worker6.update(10.0 / game.getBusinessByIndex(6).getWaitTime());
+			worker6.addPropertyChangeListener(pcEvent -> {
+				if (pcEvent.getPropertyName().equals("progress")) {
+					int value = (int) pcEvent.getNewValue();
+					progressJacuzzis.setValue(value);
+				} else if (pcEvent.getNewValue() == SwingWorker.StateValue.DONE) {
+					game.update(2, 4);
+					jacuzzisDone = true;
+					lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
+					btnJacuzzis.setEnabled(true);
+					progressJacuzzis.setValue(progressJacuzzis.getMinimum());
+					workers.add(new Worker());
+					if (game.getBusinessByIndex(6).isAutoManaged()) {
+						btnJacuzzis.doClick();
+					}
+				}
+			});
+		});
+		if (!game.getBusinessByIndex(6).isPurchased()) btnJacuzzis.setEnabled(false);
+		add(btnJacuzzis, "cell 0 10,growx");
+		
+		RoundedRectangleButton btnBuyJacuzzis = new RoundedRectangleButton("Buy 1 (" + game.getBusinessByIndex(6).getCostAsString() + ")");
+		btnBuyJacuzzis.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				game.update(1, 4);
+				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
+				jacuzzisPurchased = String.valueOf(game.getBusinessByIndex(6).getQuantityPurchased());
+				btnJacuzzis.setText(jacuzzisPurchased);
+				btnBuyJacuzzis.setText("Buy 1 (" + game.getBusinessByIndex(6).getCostAsString() + ")");
+				if (!btnJacuzzis.isEnabled() && game.getBusinessByIndex(6).isPurchased()) btnJacuzzis.setEnabled(true);
+			}
+		});
+		add(btnBuyJacuzzis, "cell 2 10,growx");
+		
+		judgementsPurchased = String.valueOf(game.getBusinessByIndex(7).getQuantityPurchased());
+		CircleButton btnJudgements = new CircleButton(judgementsPurchased, new ImageIcon("images/judgements.png"));
+		btnJudgements.addActionListener(l -> {
+			btnJudgements.setEnabled(false);
+			judgementsDone = false;
+			progressJudgements.setValue(0);
+			worker7 = workers.remove(0);
+			worker7.execute();
+			
+			worker7.update(10.0 / game.getBusinessByIndex(7).getWaitTime());
+			worker7.addPropertyChangeListener(pcEvent -> {
+				if (pcEvent.getPropertyName().equals("progress")) {
+					int value = (int) pcEvent.getNewValue();
+					progressJudgements.setValue(value);
+				} else if (pcEvent.getNewValue() == SwingWorker.StateValue.DONE) {
+					game.update(2, 4);
+					bloodBathsDone = true;
+					lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
+					btnJudgements.setEnabled(true);
+					progressJudgements.setValue(progressJudgements.getMinimum());
+					workers.add(new Worker());
+					if (game.getBusinessByIndex(7).isAutoManaged()) {
+						btnJudgements.doClick();
+					}
+				}
+			});
+		});
+		if (!game.getBusinessByIndex(7).isPurchased()) btnJudgements.setEnabled(false);
+		add(btnJudgements, "cell 0 11,growx");
+		
+		RoundedRectangleButton btnBuyJudgements = new RoundedRectangleButton("Buy 1 (" + game.getBusinessByIndex(7).getCostAsString() + ")");
+		btnBuyJudgements.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				game.update(1, 4);
+				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
+				btnJudgements.setText(judgementsPurchased);
+				judgementsPurchased = String.valueOf(game.getBusinessByIndex(7).getQuantityPurchased());
+				btnBuyJudgements.setText("Buy 1 (" + game.getBusinessByIndex(7).getCostAsString() + ")");
+				if (!btnJudgements.isEnabled() && game.getBusinessByIndex(7).isPurchased()) btnJudgements.setEnabled(true);
+			}
+		});
+		add(btnBuyJudgements, "cell 2 11,growx");
+		
+		RoundedRectangleButton btnShop = new RoundedRectangleButton("Shop");
 		btnShop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				game.update(3, 0);
@@ -302,7 +529,7 @@ public class Ad_GUI extends JPanel {
 		});
 		
 
-		add(btnShop, "cell 1 11,growx");
+		add(btnShop, "cell 1 14,growx");
 		
 		setVisible(true);
 
@@ -315,7 +542,19 @@ public class Ad_GUI extends JPanel {
 				if (!soulsDone) btnCandiedSouls.setEnabled(false);
 				if (!metalBandsDone) btnMetalBands.setEnabled(false);
 				if (!bloodBathsDone) btnBloodBaths.setEnabled(false);
+				if (!furnacesDone) btnFurnaces.setEnabled(false);
+				if (!jacuzzisDone) btnJacuzzis.setEnabled(false);
+				if (!judgementsDone) btnJudgements.setEnabled(false);
 				
+				pentagramsPurchased = String.valueOf(game.getBusinessByIndex(0).getQuantityPurchased());
+				portalsPurchased = String.valueOf(game.getBusinessByIndex(1).getQuantityPurchased());
+				soulsPurchased = String.valueOf(game.getBusinessByIndex(2).getQuantityPurchased());
+				metalBandsPurchased = String.valueOf(game.getBusinessByIndex(3).getQuantityPurchased());
+				bloodBathsPurchased = String.valueOf(game.getBusinessByIndex(4).getQuantityPurchased());
+				furnacesPurchased = String.valueOf(game.getBusinessByIndex(5).getQuantityPurchased());
+				jacuzzisPurchased = String.valueOf(game.getBusinessByIndex(6).getQuantityPurchased());
+				judgementsPurchased = String.valueOf(game.getBusinessByIndex(7).getQuantityPurchased());
+
 				if (game.getBusinessByIndex(0).isAutoManaged() && btnPentagrams.isEnabled()) 
 					btnPentagrams.doClick();
 				if (game.getBusinessByIndex(1).isAutoManaged() && btnPortals.isEnabled())
@@ -326,26 +565,48 @@ public class Ad_GUI extends JPanel {
 					btnMetalBands.doClick();
 				if (game.getBusinessByIndex(4).isAutoManaged() && btnBloodBaths.isEnabled()) 
 					btnBloodBaths.doClick();
+				if (game.getBusinessByIndex(5).isAutoManaged() && btnFurnaces.isEnabled()) 
+					btnFurnaces.doClick();
+				if (game.getBusinessByIndex(6).isAutoManaged() && btnJacuzzis.isEnabled()) 
+					btnJacuzzis.doClick();
+				if (game.getBusinessByIndex(7).isAutoManaged() && btnJudgements.isEnabled()) 
+					btnJudgements.doClick();
 				
 				lblMoney.setText("Money: " + game.getPlayer().getMoneyAsString());
 				lblDemons.setText(game.getDemons().toString());
-				btnPentagrams.setText(game.getBusinessByIndex(0).toString());
+				btnPentagrams.setText(pentagramsPurchased);
 				btnBuyPentagrams.setText("Buy 1 (" + game.getBusinessByIndex(0).getCostAsString() + ")");
-				btnPortals.setText(game.getBusinessByIndex(1).toString());
+				btnPortals.setText(portalsPurchased);
 				btnBuyPortals.setText("Buy 1 (" + game.getBusinessByIndex(1).getCostAsString() + ")");
-				btnCandiedSouls.setText(game.getBusinessByIndex(2).toString());
+				btnCandiedSouls.setText(soulsPurchased);
 				btnBuySouls.setText("Buy 1 (" + game.getBusinessByIndex(2).getCostAsString() + ")");
-				btnMetalBands.setText(game.getBusinessByIndex(3).toString());
+				btnMetalBands.setText(metalBandsPurchased);
 				btnBuyMetalBands.setText("Buy 1 (" + game.getBusinessByIndex(3).getCostAsString() + ")");
-				btnBloodBaths.setText(game.getBusinessByIndex(4).toString());
-				btnBuyBloodBaths.setText("Buy 1 (" + game.getBusinessByIndex(4).getCostAsString() + ")");	
-
+				btnBloodBaths.setText(bloodBathsPurchased);
+				btnBuyBloodBaths.setText("Buy 1 (" + game.getBusinessByIndex(4).getCostAsString() + ")");
+				btnFurnaces.setText(furnacesPurchased);
+				btnBuyFurnaces.setText("Buy 1 (" + game.getBusinessByIndex(5).getCostAsString() + ")");
+				btnJacuzzis.setText(jacuzzisPurchased);
+				btnBuyJacuzzis.setText("Buy 1 (" + game.getBusinessByIndex(6).getCostAsString() + ")");
+				btnJudgements.setText(judgementsPurchased);
+				btnBuyJudgements.setText("Buy 1 (" + game.getBusinessByIndex(7).getCostAsString() + ")");
+				
 				revalidate();
 				repaint();
 			}
 		};
 		guiTimer = new Timer(delay, updateGUI);
 		guiTimer.start();	
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2D = (Graphics2D) g.create();
+		ImageIcon icon = new ImageIcon("images/test_background_1.jpg");
+		
+		g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+		g2D.drawImage(icon.getImage(), getX(), getY(), getWidth(), getHeight(), null);
 	}
 	
 	public void updateWorkers() {

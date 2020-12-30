@@ -1,10 +1,15 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.EventQueue;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import net.miginfocom.swing.MigLayout;
 
 import gui.custom.*;
@@ -53,12 +58,36 @@ public class CircleButtonTest2 extends JFrame {
 		CircleButton metalBands = new CircleButton(new ImageIcon("images/metal-bands.png"));
 		CircleButton baths = new CircleButton(new ImageIcon("images/baths.png"));
 		
+		CircleButton tPentagrams = new CircleButton("0", new ImageIcon("images/pentagrams.png"));
+		CircleButton tPortals = new CircleButton("0", new ImageIcon("images/portals.png"));
+		CircleButton tSouls = new CircleButton("0", new ImageIcon("images/souls.png"));
+		CircleButton tMetalBands = new CircleButton("0", new ImageIcon("images/metal-bands.png"));
+		CircleButton tBaths = new CircleButton("0", new ImageIcon("images/baths.png"));
+		
+		CircleButton dPentagrams = new CircleButton("0", new ImageIcon("images/pentagrams.png"));
+		CircleButton dPortals = new CircleButton("0", new ImageIcon("images/portals.png"));
+		CircleButton dSouls = new CircleButton("0", new ImageIcon("images/souls.png"));
+		CircleButton dMetalBands = new CircleButton("0", new ImageIcon("images/metal-bands.png"));
+		CircleButton dBaths = new CircleButton("0", new ImageIcon("images/baths.png"));
+		
+		ArrayList<CircleButton> buttons = new ArrayList<CircleButton>(Arrays.asList(
+				pentagrams, portals, souls, metalBands, baths,
+				tPentagrams, tPortals, tSouls, tMetalBands, tBaths,
+				dPentagrams, dPortals, dSouls, dMetalBands, dBaths));
+		
 		// Adds Buttons to the GUI
-		contentPane.add(pentagrams, "cell 0 0");
-		contentPane.add(portals, "cell 1 0");
-		contentPane.add(souls, "cell 2 0");
-		contentPane.add(metalBands, "cell 3 0");
-		contentPane.add(baths, "cell 4 0");
+		int s = 0;
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 5; j++) {
+				contentPane.add(buttons.get(s), "cell " + j + " " + i);
+				s++;
+			}
+		
+		int t = s - 5;
+		while (s > t) {
+			buttons.get(s - 1).setEnabled(false);
+			s--;
+		}
 	}
 
 }

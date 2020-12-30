@@ -120,6 +120,10 @@ public class Business implements Purchasable, Serializable {
 	public void setMultiplier(double multiplier) {
 		this.multiplier = multiplier;
 	}
+	
+	public List<HiddenBoost> getSpeedBoosts() {
+		return speedBoosts;
+	}
 
 	public int getQuantityPurchased() {
 		return quantityPurchased;
@@ -150,4 +154,6 @@ public class Business implements Purchasable, Serializable {
 	public String toString() {
 		return quantityPurchased + " " + name + " (" + currency.format(currentRevenue) + ")";
 	}
+
+
 }
