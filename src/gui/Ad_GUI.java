@@ -75,9 +75,9 @@ public class Ad_GUI extends JPanel {
 	 */
 	public Ad_GUI(Game game) {
 		this.game = game;
-		setLayout(new MigLayout("", "[150px][158.00px][136.00px]", "[60px][][][][][][][][][][][][60px][][][][][][][][][]"));
+		setLayout(new MigLayout("", "[158.00px][158.00px][136.00px]", "[60px][][][][35.00][][][][][][][][60px][][][][][][][][][]"));
 		setBackground(Color.ORANGE);
-
+		
 		JLabel lblName = new JLabel("Player: " + game.getPlayer().getName());
 		lblName.setFont(new Font("Permanent Marker", Font.PLAIN, 15));
 		lblName.setForeground(Color.WHITE);
@@ -87,7 +87,7 @@ public class Ad_GUI extends JPanel {
 		lblAdventure.setForeground(Color.WHITE);
 		lblAdventure.setFont(new Font("Limelight", Font.PLAIN, 24));
 		add(lblAdventure, "cell 1 0");
-
+		
 		JLabel lblMoney = new JLabel("Money: " + game.getPlayer().getMoneyAsString());
 		lblMoney.setForeground(Color.WHITE);
 		lblMoney.setFont(new Font("Permanent Marker", Font.PLAIN, 15));
@@ -97,7 +97,7 @@ public class Ad_GUI extends JPanel {
 		lblSatanist.setForeground(Color.WHITE);
 		lblSatanist.setFont(new Font("Limelight", Font.PLAIN, 24));
 		add(lblSatanist, "cell 1 1");
-				
+		
 		JLabel lblDemons = new JLabel(game.getDemons().toString());
 		lblDemons.setForeground(Color.WHITE);
 		lblDemons.setFont(new Font("Permanent Marker", Font.PLAIN, 15));

@@ -6,6 +6,8 @@ import gui.ItemShop;
 import gui.ItemShop_v2;
 
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,6 +21,7 @@ import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 import assets.*;
 
@@ -32,6 +35,7 @@ public class Game implements Serializable {
 	private List<Multiplier> multipliers;
 	private List<Multiplier> purchasedMultipliers;
 	private List<SpeedBoost> boosts;
+	private List<SpeedBoost> purchasedBoosts;
 	private List<Manager> managers;
 	private Demons demons;
 	private transient static Ad_GUI gui;
@@ -111,7 +115,8 @@ public class Game implements Serializable {
 					new Manager(66666666, "The Devil")));
 			demons = new Demons(0.15);
 			purchasedMultipliers = new ArrayList<Multiplier>();
-
+			purchasedBoosts = new ArrayList<SpeedBoost>();
+			
 			for (int i = 0; i < businesses.size() && i < multipliers.size(); i++)
 				multipliers.get(i).setTargetBusiness(businesses.get(i));
 			for (int i = 0; i < businesses.size() && i < managers.size(); i++)
@@ -192,7 +197,7 @@ public class Game implements Serializable {
 			break;
 		case 5:
 			player.buySpeedBoost(businesses, boosts.get(index));
-			if (boosts.get(index).isPurchased()) boosts.remove(index);
+			if (boosts.get(index).isPurchased()) purchasedBoosts.add(boosts.remove(index));
 			break;
 		case 6: 
 			player.buyDemons(businesses, multipliers, boosts, demons);
@@ -207,6 +212,19 @@ public class Game implements Serializable {
 			if (managers.get(index).isPurchased()) managers.remove(index);
 			break;
 		}
+		
+		int delay = 500;
+		ActionListener updateBoosts = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (int i = 0; i < purchasedBoosts.size(); i++) {
+					if (!purchasedBoosts.get(i).isPurchased()) boosts.add(purchasedBoosts.remove(i));
+				}				
+			}
+		};
+		
+		new Timer(delay, updateBoosts).start();
 	}
 	
 	public List<Business> getBusinesses() {

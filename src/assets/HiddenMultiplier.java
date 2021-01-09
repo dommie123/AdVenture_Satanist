@@ -9,23 +9,23 @@ public class HiddenMultiplier extends Multiplier implements Serializable {
 	 */
 	private static final long serialVersionUID = 612893461279834L;
 	private int businessesRequired;
-	private boolean triggered;
 	
 	public HiddenMultiplier(double value, int businessesRequired) {
 		super(0, value, "");
 		this.businessesRequired = businessesRequired;
-		triggered = false;
 	}
 	
+	// Activates a hidden multiplier by setting its state to "purchased".
 	public void activateTrigger() {
-		triggered = true;
+		super.setPurchased();		
 	}
 	
 	public int getBusinessesRequired() {
 		return businessesRequired;
 	}
 	
+	// This method is meant only to make the code easier to read.
 	public boolean isTriggered() {
-		return triggered;
+		return super.isPurchased();
 	}
 }

@@ -108,6 +108,10 @@ public class Player implements Serializable {
 			if (b.isStarter()) b.setQuantityPurchased(1);
 			else b.setQuantityPurchased(0);
 			b.setMultiplier(b.getMultiplier() * demons.getMultiplier());
+			for (HiddenMultiplier hm : b.getMultipliers())
+				hm.setPurchased();
+			for (HiddenBoost hb : b.getSpeedBoosts())
+				hb.setPurchased();
 			b.update(true);
 		}
 	}

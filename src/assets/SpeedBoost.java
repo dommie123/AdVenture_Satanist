@@ -40,6 +40,12 @@ public class SpeedBoost implements Purchasable, Serializable {
 
 	// Sets expire time to [length] hours from now.
 	public void setPurchased() {
+		if (isPurchased == true) {
+			isPurchased = false;
+			expireTime = LocalTime.now();
+			expireDate = LocalDate.now();
+			return;
+		}
 		isPurchased = true;
 		expireTime = LocalTime.now().truncatedTo(ChronoUnit.SECONDS).plusHours(length);
 		if (expireTime.isBefore(LocalTime.now())) 

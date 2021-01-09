@@ -60,7 +60,7 @@ public class Business implements Purchasable, Serializable {
 	public void update(boolean purchased) {
 		// If an instance of this business has been purchased, execute the below statement.
 		if (purchased) 
-			costMultiplier *= 1.9;
+			costMultiplier *= 1.6;
 		
 		if (quantityPurchased > 0) 
 			currentRevenue = initialRevenue * quantityPurchased * multiplier;
@@ -73,6 +73,13 @@ public class Business implements Purchasable, Serializable {
 			if (quantityPurchased >= h.getBusinessesRequired() && !h.isTriggered()) {
 				h.activateTrigger();
 				multiplier *= h.getValue();
+			}
+		}
+		
+		for (HiddenBoost b : speedBoosts) {
+			if (quantityPurchased >= b.getBusinessesRequired() && !b.isTriggered()) {
+				b.activateTrigger();
+				waitTime /= b.getValue();
 			}
 		}
 	}

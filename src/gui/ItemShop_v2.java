@@ -16,12 +16,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 
 import game.Game;
 import assets.Manager;
 import assets.Multiplier;
 import assets.SpeedBoost;
+
+import gui.custom.RoundedRectangleButton;
 
 public class ItemShop_v2 extends JFrame {
 
@@ -40,7 +41,7 @@ public class ItemShop_v2 extends JFrame {
 		this.game = game;
 		setTitle("Item Shop");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 525, 300);
+		setBounds(100, 100, 575, 300);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.RED);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -72,7 +73,7 @@ public class ItemShop_v2 extends JFrame {
 		listBoosts.setLayoutOrientation(JList.VERTICAL);
 		contentPane.add(listBoosts, "cell 3 2, grow");
 		
-		JButton btnBuyManager = new JButton("Buy Manager");
+		RoundedRectangleButton btnBuyManager = new RoundedRectangleButton("Buy Manager");
 		btnBuyManager.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -93,7 +94,7 @@ public class ItemShop_v2 extends JFrame {
 		});
 		contentPane.add(btnBuyManager, "cell 1 3,growx");
 		
-		JButton btnBuyMultiplier = new JButton("Buy Multiplier");
+		RoundedRectangleButton btnBuyMultiplier = new RoundedRectangleButton("Buy Multiplier");
 		btnBuyMultiplier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -114,7 +115,7 @@ public class ItemShop_v2 extends JFrame {
 		});
 		contentPane.add(btnBuyMultiplier, "cell 2 3,growx");
 		
-		JButton btnBuyBoost = new JButton("Buy Speed Boost\r\n");
+		RoundedRectangleButton btnBuyBoost = new RoundedRectangleButton("Buy Speed Boost\r\n");
 		btnBuyBoost.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -136,7 +137,20 @@ public class ItemShop_v2 extends JFrame {
 		
 		contentPane.add(btnBuyBoost, "cell 3 3,growx");
 		
-		JButton btnDemonInvestors = new JButton("Demon Investors");
+		RoundedRectangleButton btnDemonInvestors = new RoundedRectangleButton("Demon Investors");
+		btnDemonInvestors.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (game.getDemons().getQuantityPurchased() <= 0) {
+					JOptionPane.showMessageDialog(null, "You can't reset your empire NOW! You won't get any demons for it!"
+							, "Woah there, speed demon!", JOptionPane.WARNING_MESSAGE);
+				} else {
+					int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset your empire for " 
+						+ game.getDemons().getQuantityPurchased() + " Demons?", "Confirm Reset", 
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+					if (response == JOptionPane.YES_OPTION) game.update(6, 0);
+				}
+			}
+		});
 		contentPane.add(btnDemonInvestors, "cell 2 4,growx");
 		
 		int delay = 1000;

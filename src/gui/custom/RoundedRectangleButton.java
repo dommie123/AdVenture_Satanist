@@ -90,6 +90,6 @@ public class RoundedRectangleButton extends JButton {
 		FontMetrics metrics = g.getFontMetrics(getFont());
 		int stringWidth = metrics.stringWidth(getText());
 		int stringHeight = metrics.getHeight();
-		g.drawString(getText(), getWidth() / 2 - stringWidth / 2 - stringWidth / 5, getHeight() / 2 + stringHeight / 4);
+		g.drawString(getText(), getWidth() / 2 - stringWidth / 2 - stringWidth / 7, getHeight() / 2 + stringHeight / 4);
 	}
 }
