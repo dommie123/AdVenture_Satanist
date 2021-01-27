@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +32,10 @@ class BoostTest {
 		longBoost = new SpeedBoost(5, 24, 0, "24 hour Boost");
 		
 		game = new Game();
+		
+//		game.getBoosts().add(shortBoost);
+//		game.getBoosts().add(midBoost);
+//		game.getBoosts().add(longBoost);
 	}
 
 	@AfterEach
@@ -43,14 +48,14 @@ class BoostTest {
 
 	@Test
 	void testLongSetPurchased() {
-		assertEquals(false, longBoost.isPurchased());
+		assertFalse(longBoost.isPurchased());
 		assertEquals(null, longBoost.getExpireDate());
 		assertEquals(null, longBoost.getExpireTime());
 		
-		//game.getPlayer().buySpeedBoost(businesses, longBoost);
+		game.getPlayer().buySpeedBoost(businesses, longBoost);
 		
 		assertTrue(longBoost.isPurchased());
-		assertEquals(LocalTime.now().plusHours((int) longBoost.getLength()), longBoost.getExpireTime());
+		assertEquals(LocalTime.now().plusHours((int) longBoost.getLength()).truncatedTo(ChronoUnit.SECONDS), longBoost.getExpireTime());
 		assertEquals(LocalDate.now().plusDays((int) longBoost.getLength() / 24), longBoost.getExpireDate());
 	}
 
@@ -68,10 +73,10 @@ class BoostTest {
 		
 		assertTrue(shortBoost.isPurchased());
 		//assertEquals(LocalDate.now().plusDays((int) shortBoost.getLength() / 24), shortBoost.getExpireDate());
-		assertEquals(LocalTime.now().plusHours((int) shortBoost.getLength()), shortBoost.getExpireTime());
+		assertEquals(LocalTime.now().plusHours((int) shortBoost.getLength()).truncatedTo(ChronoUnit.SECONDS), shortBoost.getExpireTime());
 		assertTrue(midBoost.isPurchased());
 		//assertEquals(LocalDate.now().plusDays((int) midBoost.getLength() / 24), midBoost.getExpireDate());
-		assertEquals(LocalTime.now().plusHours((int) midBoost.getLength()), midBoost.getExpireTime());
+		assertEquals(LocalTime.now().plusHours((int) midBoost.getLength()).truncatedTo(ChronoUnit.SECONDS), midBoost.getExpireTime());
 	}
 
 	@Test
@@ -113,5 +118,28 @@ class BoostTest {
 			else
 				assertTrue(longBoost.isPurchased());
 		}
+		
+		shortBoost.setExpireDate(LocalDate.now());
+		midBoost.setExpireDate(LocalDate.now());
+		longBoost.setExpireDate(LocalDate.now());
+		
+		shortBoost.setExpireTime(LocalTime.now());
+		midBoost.setExpireTime(LocalTime.now());
+		longBoost.setExpireTime(LocalTime.now());
+		
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+//		shortBoost.checkTime();
+//		midBoost.checkTime();
+//		longBoost.checkTime();
+		
+		assertFalse(shortBoost.isPurchased());
+		assertFalse(midBoost.isPurchased());
+		assertFalse(longBoost.isPurchased());
 	}
 }

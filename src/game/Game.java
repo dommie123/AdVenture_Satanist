@@ -43,7 +43,10 @@ public class Game implements Serializable {
 	private transient static ItemShop_v2 newShop;
 	private transient static boolean isPreviousSave = false;
 	private transient static final Scanner s = new Scanner(System.in);
-
+	
+	/*
+	 *  default constructor
+	 */
 	public Game() {		
 		if (!isPreviousSave) {
 
@@ -143,6 +146,10 @@ public class Game implements Serializable {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * The main method
+	 * @param args - the String array of arguments (unused)
+	 */
 	public static void main(String[] args) {
 		Game g = loadGame();
 		if (isPreviousSave) {
@@ -172,6 +179,11 @@ public class Game implements Serializable {
 		});
 	}
 
+	/**
+	 * Updates the game object in a specific manner depending on the code and index specified.
+	 * @param code - the integer specifying which function to execute.
+	 * @param index - the target index
+	 */
 	public void update(int code, int index) {
 		switch (code) {
 		case 1:
@@ -227,6 +239,14 @@ public class Game implements Serializable {
 		new Timer(delay, updateBoosts).start();
 	}
 	
+	/**
+	 * Updates the game in a specific manner depending on the code number specified.
+	 * @param code - the integer specifying which function to execute.
+	 */
+	public void update(int code) {
+		this.update(code, -1);
+	}
+	
 	public List<Business> getBusinesses() {
 		return businesses;
 	}
@@ -271,6 +291,9 @@ public class Game implements Serializable {
 		return s;
 	}
 	
+	/*
+	 * Saves the game to ensure the user can pick up from where they left off. 
+	 */
 	private static void saveGame(Game g) {
 		try {
 			FileOutputStream fileOut = new FileOutputStream("files/savedGame.ser");
@@ -285,6 +308,10 @@ public class Game implements Serializable {
 		
 	}
 	
+	/*
+	 * Loads a new game from an existing file or a new game if no file exists or the existing file
+	 * is corrupted.
+	 */
 	private static Game loadGame() {
 		try {
 			FileInputStream fileIn = new FileInputStream("files/savedGame.ser");

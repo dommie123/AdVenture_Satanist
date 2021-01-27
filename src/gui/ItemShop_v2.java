@@ -43,7 +43,7 @@ public class ItemShop_v2 extends JFrame {
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 575, 300);
 		contentPane = new JPanel();
-		contentPane.setBackground(Color.RED);
+		contentPane.setBackground(Color.RED.brighter());
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new MigLayout("", "[37.00][117.00][102.00,grow][102.00][grow]", "[][][100][40][]"));
@@ -147,7 +147,7 @@ public class ItemShop_v2 extends JFrame {
 					int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset your empire for " 
 						+ game.getDemons().getQuantityPurchased() + " Demons?", "Confirm Reset", 
 						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-					if (response == JOptionPane.YES_OPTION) game.update(6, 0);
+					if (response == JOptionPane.YES_OPTION) game.update(6);
 				}
 			}
 		});

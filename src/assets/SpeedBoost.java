@@ -2,11 +2,22 @@ package assets;
 
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+
+import javax.swing.Timer;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-
+/**
+ * This is the SpeedBoost class. When a player activates this item, it boosts the speed at which 
+ * every business generates revenue for a limited time. Once that time is up, the boost will expire,
+ * rendering it inactive until the player purchases it again.
+ * @author Dominick Wiley
+ *
+ */
 public class SpeedBoost implements Purchasable, Serializable {
 	/**
 	 * 
@@ -22,7 +33,17 @@ public class SpeedBoost implements Purchasable, Serializable {
 	private LocalTime expireTime; // The time at which the speed boost will expire
 	
 	private final DecimalFormat currency = (DecimalFormat) NumberFormat.getCurrencyInstance();
+	
+	private Timer currentThread;
 
+	/**
+	 * Creates the <code>SpeedBoost</code> and initializes its wait time reduction value, length of activity,
+	 * cost in "hell dollars", and name of the boost.
+	 * @param value - the value of the wait time reduction
+	 * @param length - the length (in hours) of the boost
+	 * @param cost - the amount of money the boost costs
+	 * @param name - the name of the boost
+	 */
 	public SpeedBoost(double value, long length, double cost, String name) {
 		this.value = value;
 		this.length = length;
@@ -31,19 +52,37 @@ public class SpeedBoost implements Purchasable, Serializable {
 		isPurchased = false;
 	}
 
-	// Sets expire date to [length / 24] days from the time of purchase.
+	/**
+	 *  Sets expire date to <code>length / 24</code> days from the time of purchase.
+	 *  @see setPurchased()
+	 */
 	public void longSetPurchased() {
+		if (isPurchased == true) {
+			expire();
+			return;
+		}
 		isPurchased = true;
 		expireDate = LocalDate.now().plusDays(length / 24);
 		expireTime = LocalTime.now().truncatedTo(ChronoUnit.SECONDS).plusHours(length);
+		
+		ActionListener r = new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				checkTime();
+				
+			}
+		};
+		
+		currentThread = new Timer(100, r);
+		currentThread.start();
 	}
 
-	// Sets expire time to [length] hours from now.
+	/**
+	 *  Sets expire time to <code>length</code> hours from now. If already purchased, expire.
+	 */
 	public void setPurchased() {
 		if (isPurchased == true) {
-			isPurchased = false;
-			expireTime = LocalTime.now();
-			expireDate = LocalDate.now();
+			expire();
 			return;
 		}
 		isPurchased = true;
@@ -52,30 +91,71 @@ public class SpeedBoost implements Purchasable, Serializable {
 			expireDate = LocalDate.now().plusDays(1);
 		else
 			expireDate = LocalDate.now();
+		
+		ActionListener r = new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				checkTime();
+				
+			}
+		};
+		
+		currentThread = new Timer(100, r);
+		currentThread.start();
 	}
 	
-	// Sets expire time to [length * 60] minutes from now (Same as setPurchased() except more precise)
+	/**
+	 *  Sets expire time to <code>length * 60</code> minutes from now (Same as setPurchased() except more precise)
+	 *  @see setPurchased()
+	 */
 	public void shortSetPurchased() {
+		if (isPurchased == true) {
+			expire();
+			return;
+		}
 		isPurchased = true;
 		expireTime = LocalTime.now().truncatedTo(ChronoUnit.SECONDS).plusMinutes(length * 60);
 		if (expireTime.isBefore(LocalTime.now())) 
 			expireDate = LocalDate.now().plusDays(1);
 		else
 			expireDate = LocalDate.now();
+		
+		ActionListener r = new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				checkTime();
+				
+			}
+		};
+		
+		currentThread = new Timer(100, r);
+		currentThread.start();
 	}
 
+	/**
+	 * Checks whether the player has purchased this speed boost
+	 */
 	public boolean isPurchased() {
 		return isPurchased;
 	}
-
+	/**
+	 * Gets the value of the wait time reduction
+	 * @return the value of the wait time reduction
+	 */
 	public double getValue() {
 		return value;
 	}
-
+	/**
+	 * Gets the time length of the boost.
+	 * @return the length of the boost in hours
+	 */
 	public double getLength() {
 		return length;
 	}
-
+	/**
+	 * Gets the cost of the boost in "hell dollars".
+	 * @return how much (in hell dollars) the boost will cost
+	 */
 	public double getCost() {
 		return cost;
 	}
@@ -104,25 +184,31 @@ public class SpeedBoost implements Purchasable, Serializable {
 	}
 	// End Debug Methods
 	
-	public void checkTime() {
+	@Override
+	public String toString() {
+		return name + " (" + currency.format(cost) + ")";
+	}
+	/*
+	 * Checks to see if the current time is after the boost's expire time.
+	 */
+	private void checkTime() {
 		try {
-			if (LocalTime.now().isAfter(expireTime) && LocalDate.now().isAfter(expireDate)) 
-				expire();
+			if (expireDate != null)
+				if (LocalTime.now().isAfter(expireTime) && (LocalDate.now().isAfter(expireDate) || LocalDate.now().isEqual(expireDate))) 
+					expire();
+			else 
+				if (LocalTime.now().isAfter(expireTime))
+					expire();
 		} catch (NullPointerException e) {
-			if (LocalTime.now().isAfter(expireTime)) {
-				expire();
-			}
+			expire();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 	}
-
-	@Override
-	public String toString() {
-		return name + " (" + currency.format(cost) + ")";
-	}
-
+	/*
+	 * Expires this boost, so it becomes unusable until it is purchased again.
+	 */
 	private void expire() {
 		isPurchased = false;
 		expireTime = null;

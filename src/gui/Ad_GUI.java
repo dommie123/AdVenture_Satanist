@@ -29,13 +29,22 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
+/**
+ * This is the GUI for the AdVenture Satanist game. Like the <code>Game</code> class, it is 
+ * the heart of the program, allowing for user interaction and ensuring that they have a
+ * pleasant experience whilst playing. 
+ * @author Dominick Wiley
+ * @see Game
+ *
+ */
 public class Ad_GUI extends JPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 12L;
+	
+	// Check if each of the businesses is done generating revenue.
 	private boolean pentagramsDone = true;
 	private boolean portalsDone = true;
 	private boolean soulsDone = true;
@@ -55,6 +64,7 @@ public class Ad_GUI extends JPanel {
 	private transient Worker worker6;
 	private transient Worker worker7;
 	
+	// String representations of how many of each business is purchased.
 	private String pentagramsPurchased;
 	private String portalsPurchased;
 	private String soulsPurchased;
@@ -64,12 +74,17 @@ public class Ad_GUI extends JPanel {
 	private String jacuzzisPurchased;
 	private String judgementsPurchased;
 	
+	private Game game;
+	
+	// A list of idle workers to be replaced after a one-time use.
 	private List<Worker> workers = new ArrayList<Worker>(Arrays.asList(new Worker(), new Worker(), new Worker()
 									, new Worker(), new Worker(), new Worker(), new Worker(), new Worker()));
-	
+	/**
+	 * The timer used to execute background tasks while the GUI display updates.
+	 */
 	public Timer guiTimer;
 
-	public Game game;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -524,7 +539,7 @@ public class Ad_GUI extends JPanel {
 		RoundedRectangleButton btnShop = new RoundedRectangleButton("Shop");
 		btnShop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				game.update(3, 0);
+				game.update(3);
 			}
 		});
 		
@@ -608,7 +623,10 @@ public class Ad_GUI extends JPanel {
 		g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 		g2D.drawImage(icon.getImage(), getX(), getY(), getWidth(), getHeight(), null);
 	}
-	
+	/**
+	 * Pauses and unpauses the swingworkers. (This method is deprecated and no longer in use.)
+	 * @deprecated 
+	 */
 	public void updateWorkers() {
 		for (Worker w : workers) {
 			if (w.isPaused())
@@ -617,27 +635,48 @@ public class Ad_GUI extends JPanel {
 				w.pause();
 		}
 	}
-
+	/**
+	 * Gets the game associated with this GUI.
+	 * @return the game associated with the GUI
+	 */
 	public Game getGame() {
 		return game;
 	}
 }
 
+/**
+ * This is a custom-made SwingWorker designed to update the progress bars on the GUI, which
+ * track the progress of the various businesses in generating revenue for the player. Without this
+ * class, the progress bars would be static and unchanging, making it impossible for the player to
+ * track progress.
+ * @author Dominick Wiley
+ *
+ */
 class Worker extends SwingWorker<Void, Integer> {
 
 	private double inc = 1;		// Progress Increment
 	private int delay = 100;
 	private boolean paused = false;
 	
-	
+	/**
+	 * Pauses the worker, halting progress until it is resumed. (This method is deprecated.)
+	 * @deprecated
+	 */
 	public void pause() {
 		paused = true;
 	}
-	
+	/**
+	 * If paused, resumes the progress of the worker. (This method is deprecated.)
+	 * @deprecated
+	 */
 	public void resume() {
 		paused = false;
 	}
-	
+	/**
+	 * Checks whether the worker is paused. (This method is deprecated.)
+	 * @return false if the worker is making progress
+	 * @deprecated
+	 */
 	public boolean isPaused() {
 		return paused;
 	}
@@ -669,7 +708,10 @@ class Worker extends SwingWorker<Void, Integer> {
 			System.exit(ImageObserver.ERROR);
 		}
 	}
-	
+	/**
+	 * Changes the worker's increment value depending on the multiplier set by the program.
+	 * @param multiplier - the value to multiply the increment value by
+	 */
 	protected void update(double multiplier) {
 		inc *= multiplier;
 		// If progress increment value is a decimal less than 1, multiply delay by 
